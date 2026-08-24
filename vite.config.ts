@@ -3,9 +3,10 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
+  base: './', // Relative base path for GitHub Pages deployment
   plugins: [react(), tailwindcss()],
   server: {
-    host: true, // Listen on all network interfaces (0.0.0.0) for local network/phone access
+    host: true,
     port: 5173,
   },
 })

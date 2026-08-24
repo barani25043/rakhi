@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ShinchanAnimation from "./ShinchanAnimation";
+import type { ShinchanAnimationType } from "./ShinchanAnimation";
 import Confetti from "./Confetti";
 import cardData from "../data/cardData";
 

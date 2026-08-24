@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import type { TargetAndTransition } from "framer-motion";
 
 export type ShinchanAnimationType =
   | "idle"
@@ -391,7 +392,7 @@ export default function ShinchanAnimation({
             willChange: "transform",
           }}
           animate={{
-            ...config.container,
+            ...(config.container as TargetAndTransition),
             rotateX: tilt.rotateX,
             rotateY: tilt.rotateY,
           }}
@@ -401,7 +402,7 @@ export default function ShinchanAnimation({
           <motion.div
             className="relative w-full h-full select-none cursor-pointer z-10"
             style={{ transformStyle: "preserve-3d" }}
-            animate={config.inner}
+            animate={config.inner as TargetAndTransition}
             onClick={handleTap}
             whileHover={{ scale: 1.1, rotateY: 12, rotateX: -8 }}
             whileTap={{ scale: 0.88, rotateX: 18 }}
