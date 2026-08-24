@@ -197,6 +197,60 @@ const animation3DConfigs: Record<
   },
 };
 
+const FUNNY_QUOTES = [
+  "Action Kamen BEAM!! ⚡",
+  "Didi, 500rs for Choco-chips please! 🍫",
+  "Buri Buri Zaemon to the rescue! 🐷",
+  "Am I looking handsome today Didi? 😳",
+  "Oooh la la! Beautiful Didi! 💖",
+  "I won't steal your snacks! (Maybe) 😜",
+  "Buri Buri Butt Dance! 💃",
+];
+
+// Cartoon sound effects synthesizer using Web Audio API
+function playCartoonSound(type: "boing" | "pop" | "cheer") {
+  try {
+    const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    const now = ctx.currentTime;
+
+    if (type === "boing") {
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(150, now);
+      osc.frequency.exponentialRampToValueAtTime(600, now + 0.3);
+      gain.gain.setValueAtTime(0.3, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      osc.start(now);
+      osc.stop(now + 0.3);
+    } else if (type === "pop") {
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(400, now);
+      osc.frequency.exponentialRampToValueAtTime(1200, now + 0.15);
+      gain.gain.setValueAtTime(0.4, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+      osc.start(now);
+      osc.stop(now + 0.15);
+    } else {
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(523.25, now);
+      osc.frequency.setValueAtTime(659.25, now + 0.1);
+      osc.frequency.setValueAtTime(783.99, now + 0.2);
+      gain.gain.setValueAtTime(0.25, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+      osc.start(now);
+      osc.stop(now + 0.4);
+    }
+  } catch {
+    // Web Audio blocked
+  }
+}
+
 export default function ShinchanAnimation({
   animation,
   size = 130,
@@ -206,18 +260,53 @@ export default function ShinchanAnimation({
   speechText,
 }: ShinchanAnimationProps) {
   const [activeCombo, setActiveCombo] = useState<ShinchanAnimationType | null>(null);
+  const [funnyQuote, setFunnyQuote] = useState<string | null>(null);
+  const [popProps, setPopProps] = useState<Array<{ id: number; icon: string; x: number; y: number }>>([]);
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
 
   const currentAnim = activeCombo || animation;
   const imgSrc = ASSET_MAP[currentAnim] || ASSET_MAP.idle;
   const config = animation3DConfigs[currentAnim] || animation3DConfigs.idle;
-  const speech = speechText || DEFAULT_SPEECH[currentAnim] || "Hehehe! ❤️";
+  const speech = funnyQuote || speechText || DEFAULT_SPEECH[currentAnim] || "Hehehe! ❤️";
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({
+      rotateX: -y * 25,
+      rotateY: x * 25,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ rotateX: 0, rotateY: 0 });
+  };
 
   const handleTap = () => {
+    playCartoonSound(currentAnim === "jump" ? "boing" : "pop");
+
+    // Random funny quote on tap
+    const randomQ = FUNNY_QUOTES[Math.floor(Math.random() * FUNNY_QUOTES.length)];
+    setFunnyQuote(randomQ);
+    setTimeout(() => setFunnyQuote(null), 2500);
+
+    // Pop funny 3D props (Choco-chips 🍫, Action Kamen 🎭, Hearts ❤️)
+    const icons = ["🍫", "🎭", "❤️", "⚡", "⭐", "🎉"];
+    const newProps = Array.from({ length: 6 }, (_, i) => ({
+      id: Date.now() + i,
+      icon: icons[Math.floor(Math.random() * icons.length)],
+      x: (Math.random() - 0.5) * 120,
+      y: (Math.random() - 0.5) * 100,
+    }));
+    setPopProps(newProps);
+    setTimeout(() => setPopProps([]), 1200);
+
     if (!activeCombo) {
       setActiveCombo("dance");
-      setTimeout(() => setActiveCombo("jump"), 900);
-      setTimeout(() => setActiveCombo("happy"), 1800);
-      setTimeout(() => setActiveCombo(null), 2700);
+      setTimeout(() => setActiveCombo("jump"), 800);
+      setTimeout(() => setActiveCombo("happy"), 1600);
+      setTimeout(() => setActiveCombo(null), 2400);
     }
     if (onClick) onClick();
   };
@@ -260,14 +349,39 @@ export default function ShinchanAnimation({
         </motion.div>
       )}
 
+      {/* Pop props burst on tap */}
+      <AnimatePresence>
+        {popProps.map((p) => (
+          <motion.div
+            key={p.id}
+            className="absolute text-2xl pointer-events-none z-40 select-none"
+            initial={{ opacity: 1, scale: 0.5, x: 0, y: 0 }}
+            animate={{
+              opacity: [1, 1, 0],
+              scale: [0.5, 1.4, 0.8],
+              x: p.x,
+              y: p.y - 40,
+              rotate: [0, Math.random() > 0.5 ? 90 : -90],
+            }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.9, ease: "easeOut" }}
+          >
+            {p.icon}
+          </motion.div>
+        ))}
+      </AnimatePresence>
+
       {/* 3D Perspective Container */}
       <div
+        className="cursor-pointer"
         style={{
           perspective: 600,
           perspectiveOrigin: "50% 50%",
           width: size,
           height: size,
         }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
       >
         {/* 3D Rotation Layer — rotateX/Y/Z for tilt depth */}
         <motion.div
@@ -276,7 +390,12 @@ export default function ShinchanAnimation({
             transformStyle: "preserve-3d",
             willChange: "transform",
           }}
-          animate={config.container}
+          animate={{
+            ...config.container,
+            rotateX: tilt.rotateX,
+            rotateY: tilt.rotateY,
+          }}
+          transition={{ type: "spring", stiffness: 200, damping: 15 }}
         >
           {/* Inner transform layer — translate, scale, squash & stretch */}
           <motion.div
@@ -284,8 +403,8 @@ export default function ShinchanAnimation({
             style={{ transformStyle: "preserve-3d" }}
             animate={config.inner}
             onClick={handleTap}
-            whileHover={{ scale: 1.1, rotateY: 10, rotateX: -5 }}
-            whileTap={{ scale: 0.88, rotateX: 15 }}
+            whileHover={{ scale: 1.1, rotateY: 12, rotateX: -8 }}
+            whileTap={{ scale: 0.88, rotateX: 18 }}
           >
             {/* The character image — transparent PNG, no mix-blend needed */}
             <img

@@ -96,9 +96,9 @@ export default function LetterScene({ onNext }: LetterSceneProps) {
 
           {/* Wax seal */}
           <motion.div
-            className="absolute -top-5 left-1/2 -translate-x-1/2 w-12 h-12 
+            className="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 
               bg-gradient-to-br from-red-rakhi to-burgundy rounded-full 
-              flex items-center justify-center shadow-lg border-2 border-red-deep"
+              flex items-center justify-center shadow-lg border-2 border-red-deep z-20"
             initial={{ scale: 0, rotate: -180 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ delay: 0.4, type: "spring" }}
@@ -108,7 +108,7 @@ export default function LetterScene({ onNext }: LetterSceneProps) {
 
           {/* Header */}
           <motion.h2
-            className="font-display text-center text-burgundy text-xl sm:text-2xl mb-6 mt-4 leading-snug"
+            className="font-display text-center text-burgundy text-xl sm:text-2xl mb-6 mt-5 pt-3 leading-snug"
             initial={{ opacity: 0 }}
             animate={{ opacity: showContent ? 1 : 0 }}
             transition={{ duration: 0.5 }}
