@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useSceneNavigation } from "./hooks/useSceneNavigation";
 import { useBackgroundMusic } from "./hooks/useBackgroundMusic";
+import { getAssetPath } from "./utils/assets";
 
 import IntroScene from "./components/IntroScene";
 import ShinchanScene from "./components/ShinchanScene";
@@ -23,7 +24,7 @@ export default function App() {
     useSceneNavigation();
 
   const music = useBackgroundMusic({
-    src: "/assets/audio/bg-music.mp3",
+    src: getAssetPath("assets/audio/bg-music.mp3"),
     loop: true,
     volume: 0.25,
     fadeDuration: 1500,

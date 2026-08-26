@@ -1,3 +1,5 @@
+import { getAssetPath } from "../utils/assets";
+
 export type Scene =
   | "intro"
   | "character"
@@ -92,42 +94,42 @@ Always keep smiling.`,
 
   memories: [
     {
-      image: "/assets/sister/photo1.jpg",
+      image: getAssetPath("assets/sister/photo1.jpg"),
       caption: "Partners in crime ❤️",
       alt: "Memory photo 1 with Akka",
       rotation: -4,
       shinchanAnimation: "peek",
     },
     {
-      image: "/assets/sister/photo2.jpg",
+      image: getAssetPath("assets/sister/photo2.jpg"),
       caption: "That one crazy day 😂",
       alt: "Memory photo 2 with Akka",
       rotation: 3,
       shinchanAnimation: "walk",
     },
     {
-      image: "/assets/sister/photo3.jpg",
+      image: getAssetPath("assets/sister/photo3.jpg"),
       caption: "Forever memories 💕",
       alt: "Memory photo 3 with Akka",
       rotation: -2,
       shinchanAnimation: "happy",
     },
     {
-      image: "/assets/sister/photo4.jpg",
+      image: getAssetPath("assets/sister/photo4.jpg"),
       caption: "Best moments 🌟",
       alt: "Memory photo 4 with Akka",
       rotation: 5,
       shinchanAnimation: "gift",
     },
     {
-      image: "/assets/sister/photo5.jpg",
+      image: getAssetPath("assets/sister/photo5.jpg"),
       caption: "Us being us 😜",
       alt: "Memory photo 5 with Akka",
       rotation: -3,
       shinchanAnimation: "cry",
     },
     {
-      image: "/assets/sister/photo6.jpg",
+      image: getAssetPath("assets/sister/photo6.jpg"),
       caption: "Always together 🤗",
       alt: "Memory photo 6 with Akka",
       rotation: 2,

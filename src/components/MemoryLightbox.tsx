@@ -2,6 +2,7 @@ import { useEffect, useCallback, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import type { MemoryItem } from "../data/cardData";
+import { getAssetPath } from "../utils/assets";
 
 interface MemoryLightboxProps {
   memories: MemoryItem[];
@@ -158,7 +159,7 @@ export default function MemoryLightbox({
               {/* Photo with frame */}
               <div className="bg-white p-3 rounded-lg shadow-2xl">
                 <motion.img
-                  src={memory.image}
+                  src={getAssetPath(memory.image)}
                   alt={memory.alt}
                   className="w-full h-auto max-h-[60vh] object-cover rounded-sm"
                   animate={{

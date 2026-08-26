@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { TargetAndTransition } from "framer-motion";
+import { getAssetPath } from "../utils/assets";
 
 export type ShinchanAnimationType =
   | "idle"
@@ -32,20 +33,20 @@ interface ShinchanAnimationProps {
 }
 
 const ASSET_MAP: Record<string, string> = {
-  idle: "/assets/shinchan/idle.png",
-  wave: "/assets/shinchan/wave.png",
-  walk: "/assets/shinchan/idle.png",
-  happy: "/assets/shinchan/happy.png",
-  cry: "/assets/shinchan/crying.png",
-  jump: "/assets/shinchan/jump.png",
-  gift: "/assets/shinchan/gift.png",
-  peek: "/assets/shinchan/idle.png",
-  dance: "/assets/shinchan/dance.png",
-  action_kamen: "/assets/shinchan/action_kamen.png",
-  pajama: "/assets/shinchan/pajama.png",
-  rakhi_special: "/assets/shinchan/rakhi_special.png",
-  mischief: "/assets/shinchan/mischief.png",
-  heart_love: "/assets/shinchan/heart_love.png",
+  idle: getAssetPath("assets/shinchan/idle.png"),
+  wave: getAssetPath("assets/shinchan/wave.png"),
+  walk: getAssetPath("assets/shinchan/idle.png"),
+  happy: getAssetPath("assets/shinchan/happy.png"),
+  cry: getAssetPath("assets/shinchan/crying.png"),
+  jump: getAssetPath("assets/shinchan/jump.png"),
+  gift: getAssetPath("assets/shinchan/gift.png"),
+  peek: getAssetPath("assets/shinchan/idle.png"),
+  dance: getAssetPath("assets/shinchan/dance.png"),
+  action_kamen: getAssetPath("assets/shinchan/action_kamen.png"),
+  pajama: getAssetPath("assets/shinchan/pajama.png"),
+  rakhi_special: getAssetPath("assets/shinchan/rakhi_special.png"),
+  mischief: getAssetPath("assets/shinchan/mischief.png"),
+  heart_love: getAssetPath("assets/shinchan/heart_love.png"),
 };
 
 const DEFAULT_SPEECH: Record<string, string> = {
@@ -546,6 +547,15 @@ export default function ShinchanAnimation({
               draggable={false}
               onError={(e) => {
                 const target = e.currentTarget;
+                if (!target.dataset.retried) {
+                  target.dataset.retried = "true";
+                  // Retry loading without leading dot or slash or relative to current path
+                  const filename = imgSrc.split("/").pop();
+                  if (filename) {
+                    target.src = `assets/shinchan/${filename}`;
+                    return;
+                  }
+                }
                 target.style.display = "none";
                 const parent = target.parentElement;
                 if (parent && !parent.querySelector(".emoji-fallback")) {

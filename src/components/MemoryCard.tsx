@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import type { MemoryItem } from "../data/cardData";
+import { getAssetPath } from "../utils/assets";
 
 interface MemoryCardProps {
   memory: MemoryItem;
@@ -47,7 +48,7 @@ export default function MemoryCard({ memory, index, onClick }: MemoryCardProps) 
       <div className="scrapbook-photo bg-white shadow-xl hover:shadow-2xl transition-shadow duration-300">
         <div className="w-36 h-44 sm:w-40 sm:h-48 overflow-hidden rounded-sm relative">
           <img
-            src={memory.image}
+            src={getAssetPath(memory.image)}
             alt={memory.alt}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             loading="lazy"
