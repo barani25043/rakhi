@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
-import ShinchanAnimation from "./ShinchanAnimation";
+import CharacterStage from "./CharacterStage";
 import Confetti from "./Confetti";
 import cardData from "../data/cardData";
 
@@ -24,7 +24,7 @@ export default function AwardScene({ onNext }: AwardSceneProps) {
 
   return (
     <motion.div
-      className="relative w-full h-full flex flex-col items-center justify-center overflow-y-auto overflow-x-hidden no-scrollbar"
+      className="relative w-full h-full flex flex-col items-center overflow-y-auto overflow-x-hidden no-scrollbar px-4 py-4"
       style={{
         background:
           "linear-gradient(160deg, #1a0a10 0%, #2D1018 30%, #3D1520 50%, #4A1119 70%, #1a0a10 100%)",
@@ -36,92 +36,93 @@ export default function AwardScene({ onNext }: AwardSceneProps) {
     >
       <Confetti active={showConfetti} duration={6000} particleCount={80} />
 
+      {/* Diyas with glow */}
+      <div className="absolute top-6 left-5 text-2xl animate-diya opacity-80 select-none">🪔</div>
+      <div className="absolute top-8 right-6 text-xl animate-diya opacity-70 select-none" style={{ animationDelay: "0.6s" }}>🪔</div>
+      <div className="absolute bottom-24 left-4 text-lg animate-diya opacity-50 select-none" style={{ animationDelay: "1.2s" }}>🪔</div>
+      <div className="absolute bottom-20 right-5 text-xl animate-diya opacity-60 select-none" style={{ animationDelay: "0.8s" }}>🪔</div>
+
+      {/* Twinkling golden stars */}
+      {[...Array(12)].map((_, i) => (
+        <div
+          key={`star-${i}`}
+          className="absolute animate-twinkle select-none pointer-events-none"
+          style={{
+            left: `${4 + ((i * 9) % 92)}%`,
+            top: `${3 + ((i * 11) % 94)}%`,
+            animationDelay: `${(i * 0.4) % 3}s`,
+            fontSize: `${7 + (i % 4) * 2}px`,
+            color: '#F0D68A',
+            opacity: 0.5,
+          }}
+        >
+          {i % 2 === 0 ? '✦' : '✧'}
+        </div>
+      ))}
+
+      {/* Emoji rain — celebratory */}
+      {['🏆', '⭐', '✨', '🎉', '🍌', '🪢', '👑'].map((emoji, i) => (
+        <div
+          key={`rain-${i}`}
+          className="absolute animate-emoji-rain select-none pointer-events-none opacity-15"
+          style={{
+            left: `${8 + i * 12}%`,
+            animationDelay: `${i * 0.7}s`,
+            animationDuration: `${3.5 + (i % 3) * 1.5}s`,
+            fontSize: `${12 + (i % 3) * 3}px`,
+          }}
+        >
+          {emoji}
+        </div>
+      ))}
+
       {/* Gold particles */}
       {[...Array(12)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-1.5 h-1.5 rounded-full bg-gold"
+          className="absolute w-1.5 h-1.5 rounded-full bg-gold pointer-events-none"
           style={{
-            left: `${10 + Math.random() * 80}%`,
-            top: `${10 + Math.random() * 80}%`,
+            left: `${8 + ((i * 11) % 84)}%`,
+            top: `${8 + ((i * 13) % 84)}%`,
           }}
-          animate={{
-            opacity: [0, 1, 0],
-            scale: [0, 1.5, 0],
-            y: [0, -20],
-          }}
-          transition={{
-            duration: 2 + Math.random(),
-            delay: Math.random() * 3,
-            repeat: Infinity,
-          }}
+          animate={{ opacity: [0, 1, 0], scale: [0, 1.5, 0], y: [0, -20] }}
+          transition={{ duration: 2.2, delay: (i * 0.25) % 3, repeat: Infinity }}
         />
-      ))}
-
-      {/* Stars background */}
-      {[...Array(6)].map((_, i) => (
-        <motion.div
-          key={`star-${i}`}
-          className="absolute text-gold-light/20"
-          style={{
-            left: `${5 + i * 16}%`,
-            top: `${10 + (i % 3) * 30}%`,
-          }}
-          animate={{
-            opacity: [0.1, 0.4, 0.1],
-            scale: [0.8, 1.2, 0.8],
-            rotate: [0, 20, 0],
-          }}
-          transition={{
-            duration: 3,
-            delay: i * 0.3,
-            repeat: Infinity,
-          }}
-        >
-          <Star size={20} fill="currentColor" />
-        </motion.div>
       ))}
 
       {/* Certificate */}
       <motion.div
-        className="relative w-[88%] max-w-[380px] mx-auto mt-6 mb-4"
+        className="relative w-[94%] max-w-[390px] mx-auto mt-2 mb-3 z-10 shrink-0"
         initial={{ scale: 0.85, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.8, type: "spring", bounce: 0.3 }}
       >
         <div
-          className="certificate-border rounded-xl p-6 sm:p-8 paper-texture text-center"
+          className="certificate-border rounded-2xl p-5 sm:p-6 paper-texture text-center relative shadow-2xl"
           style={{
             background:
               "linear-gradient(135deg, #FFFDF9 0%, #FFF8F0 30%, #FFF5E8 60%, #FFFDF9 100%)",
           }}
         >
-          {/* Decorative corners */}
-          <div className="absolute top-4 left-4 text-gold text-xl opacity-60">❦</div>
-          <div className="absolute top-4 right-4 text-gold text-xl opacity-60" style={{ transform: "scaleX(-1)" }}>❦</div>
-          <div className="absolute bottom-4 left-4 text-gold text-xl opacity-60" style={{ transform: "scaleY(-1)" }}>❦</div>
-          <div className="absolute bottom-4 right-4 text-gold text-xl opacity-60" style={{ transform: "scale(-1)" }}>❦</div>
+          {/* Corners */}
+          <div className="absolute top-2 left-2 text-gold text-lg opacity-60 select-none">❦</div>
+          <div className="absolute top-2 right-2 text-gold text-lg opacity-60 select-none" style={{ transform: "scaleX(-1)" }}>❦</div>
+          <div className="absolute bottom-2 left-2 text-gold text-lg opacity-60 select-none" style={{ transform: "scaleY(-1)" }}>❦</div>
+          <div className="absolute bottom-2 right-2 text-gold text-lg opacity-60 select-none" style={{ transform: "scale(-1)" }}>❦</div>
 
           {/* Trophy */}
           <motion.div
-            className="text-5xl mb-3"
-            animate={{
-              rotate: [0, -5, 5, -5, 0],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              delay: 1,
-            }}
+            className="text-4xl mb-1 select-none"
+            animate={{ rotate: [0, -5, 5, -5, 0], scale: [1, 1.1, 1] }}
+            transition={{ duration: 2, repeat: Infinity, delay: 1 }}
           >
             🏆
           </motion.div>
 
           {/* Title */}
           <motion.h2
-            className="font-display text-2xl sm:text-3xl text-burgundy mb-4 gold-emboss"
-            initial={{ opacity: 0, y: 10 }}
+            className="font-display text-xl sm:text-2xl text-burgundy mb-2 gold-emboss font-bold"
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
@@ -130,7 +131,7 @@ export default function AwardScene({ onNext }: AwardSceneProps) {
 
           {/* Gold line */}
           <motion.div
-            className="w-24 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-4"
+            className="w-20 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-2"
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ delay: 0.6, duration: 0.6 }}
@@ -138,7 +139,7 @@ export default function AwardScene({ onNext }: AwardSceneProps) {
 
           {/* Presentation text */}
           <motion.p
-            className="font-body text-gray-500 text-sm mb-3 italic"
+            className="font-body text-gray-500 text-xs italic mb-1"
             initial={{ opacity: 0 }}
             animate={{ opacity: showDetails ? 1 : 0 }}
             transition={{ delay: 0.2 }}
@@ -148,7 +149,7 @@ export default function AwardScene({ onNext }: AwardSceneProps) {
 
           {/* Sister name */}
           <motion.h3
-            className="font-hand text-4xl sm:text-5xl text-rose mb-5"
+            className="font-hand text-3xl sm:text-4xl text-rose mb-2 font-bold"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: showDetails ? 1 : 0, scale: showDetails ? 1 : 0.8 }}
             transition={{ delay: 0.4, type: "spring" }}
@@ -156,8 +157,8 @@ export default function AwardScene({ onNext }: AwardSceneProps) {
             {cardData.sisterName}
           </motion.h3>
 
-          {/* Stars row */}
-          <div className="flex justify-center gap-2 mb-4">
+          {/* Stars */}
+          <div className="flex justify-center gap-1 mb-2">
             {[...Array(5)].map((_, i) => (
               <motion.div
                 key={i}
@@ -170,21 +171,21 @@ export default function AwardScene({ onNext }: AwardSceneProps) {
                 }}
                 transition={{ delay: 0.6 + i * 0.1, type: "spring" }}
               >
-                <Star size={22} fill="currentColor" />
+                <Star size={18} fill="currentColor" />
               </motion.div>
             ))}
           </div>
 
           {/* Qualities */}
-          <div className="space-y-1.5 mb-5">
+          <div className="space-y-0.5 mb-2">
             {cardData.awardQualities.map((quality, i) => (
               <motion.p
                 key={i}
-                className="font-hand text-lg text-gray-600"
-                initial={{ opacity: 0, x: -15 }}
+                className="font-hand text-sm sm:text-base text-gray-700 font-bold"
+                initial={{ opacity: 0, x: -12 }}
                 animate={{
                   opacity: showDetails ? 1 : 0,
-                  x: showDetails ? 0 : -15,
+                  x: showDetails ? 0 : -12,
                 }}
                 transition={{ delay: 0.8 + i * 0.1 }}
               >
@@ -195,47 +196,55 @@ export default function AwardScene({ onNext }: AwardSceneProps) {
 
           {/* Rating */}
           <motion.div
-            className="mt-4 pt-3 border-t border-gold/30"
+            className="mt-2 pt-2 border-t border-gold/30"
             initial={{ opacity: 0 }}
             animate={{ opacity: showDetails ? 1 : 0 }}
             transition={{ delay: 1.5 }}
           >
-            <p className="font-body text-xs text-gray-400 mb-1">Rating</p>
-            <p className="font-display text-3xl text-gold-dark font-bold gold-emboss">
+            <p className="font-body text-xs text-gray-400 mb-0.5">Rating</p>
+            <p className="font-display text-xl sm:text-2xl text-gold-dark font-bold gold-emboss">
               {cardData.awardRating}
             </p>
           </motion.div>
         </div>
       </motion.div>
 
-      {/* Shinchan with trophy presenter */}
+      {/* Character Stage */}
       <motion.div
-        className="mt-2 my-2 z-10"
-        initial={{ y: 30, opacity: 0 }}
+        className="my-2 z-10 shrink-0"
+        initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 1.2, type: "spring" }}
       >
-        <ShinchanAnimation
-          animation="gift"
-          size={190}
-          speechText="Best Sister Ever! 🏆"
+        <CharacterStage
+          size={120}
+          shinchanAnim="action_kamen"
+          shinchanSpeech="Action Kamen Akka Award! 🦸‍♂️🏆"
+          sideMinions="both"
+          minionLeftAnim="cheer"
+          minionLeftChar="kevin"
+          minionRightAnim="happy"
+          minionRightChar="bob"
+          compact
         />
       </motion.div>
 
       {/* Continue button */}
-      <motion.button
-        className="mt-4 mb-6 flex items-center gap-2 px-8 py-3
-          bg-gradient-to-r from-gold-dark to-gold text-white
-          rounded-full font-medium shadow-lg shimmer select-none"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 2 }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={onNext}
-      >
-        One Last Thing ❤️
-      </motion.button>
+      <div className="pb-12 pt-1 z-20 shrink-0">
+        <motion.button
+          className="flex items-center gap-2 px-8 py-3
+            bg-gradient-to-r from-gold-dark to-gold text-white
+            rounded-full font-medium shadow-xl shimmer select-none cursor-pointer"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.8 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={onNext}
+        >
+          One Last Thing ❤️
+        </motion.button>
+      </div>
     </motion.div>
   );
 }

@@ -34,7 +34,7 @@ export default function App() {
   };
 
   return (
-    <div className="w-full h-[100dvh] overflow-hidden bg-[#1a0a10]">
+    <div className="w-full h-[100dvh] overflow-hidden bg-[#1a0a10] relative">
       {/* Desktop wrapper — centers card on larger screens */}
       <div className="w-full h-full sm:desktop-wrapper mx-auto relative">
         <AnimatePresence mode="wait">

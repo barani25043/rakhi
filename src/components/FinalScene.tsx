@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { RotateCcw, Heart } from "lucide-react";
 import FloatingHearts from "./FloatingHearts";
-import ShinchanAnimation from "./ShinchanAnimation";
+import CharacterStage from "./CharacterStage";
 import cardData from "../data/cardData";
 
 interface FinalSceneProps {
@@ -16,16 +16,16 @@ export default function FinalScene({ onReplay }: FinalSceneProps) {
   const handleHeartClick = () => {
     const newClicks = heartClicks + 1;
     setHeartClicks(newClicks);
-    if (newClicks >= 5) {
+    if (newClicks >= 3) {
       setHeartBurst(true);
-      setTimeout(() => setHeartBurst(false), 2000);
+      setTimeout(() => setHeartBurst(false), 2500);
       setHeartClicks(0);
     }
   };
 
   return (
     <motion.div
-      className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden cursor-sparkle"
+      className="relative w-full h-full flex flex-col items-center justify-center gap-2 overflow-hidden cursor-sparkle py-6 px-4"
       style={{
         background:
           "linear-gradient(160deg, #4A1119 0%, #8B2252 30%, #C41E3A 50%, #E8456B 70%, #FF6B8A 100%)",
@@ -35,27 +35,50 @@ export default function FinalScene({ onReplay }: FinalSceneProps) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8 }}
     >
-      <FloatingHearts count={15} color="#FFD6E0" />
+      <FloatingHearts count={12} color="#FFD6E0" />
 
-      {/* Floating rakhis */}
+      {/* Twinkling golden stars */}
+      {[...Array(16)].map((_, i) => (
+        <div
+          key={`star-${i}`}
+          className="absolute animate-twinkle select-none pointer-events-none"
+          style={{
+            left: `${3 + ((i * 7) % 94)}%`,
+            top: `${2 + ((i * 11) % 96)}%`,
+            animationDelay: `${(i * 0.3) % 2.5}s`,
+            fontSize: `${6 + (i % 5) * 2}px`,
+            color: i % 2 === 0 ? '#F0D68A' : '#FFD6E0',
+            opacity: 0.6,
+          }}
+        >
+          {i % 3 === 0 ? '✦' : i % 3 === 1 ? '✧' : '⋆'}
+        </div>
+      ))}
+
+      {/* Emoji rain — celebration! */}
+      {['🎉', '🍌', '🪢', '❤️', '⭐', '✨', '🎊', '🌸'].map((emoji, i) => (
+        <div
+          key={`rain-${i}`}
+          className="absolute animate-emoji-rain select-none pointer-events-none opacity-20"
+          style={{
+            left: `${5 + i * 12}%`,
+            animationDelay: `${i * 0.6}s`,
+            animationDuration: `${3 + (i % 4) * 1.2}s`,
+            fontSize: `${14 + (i % 3) * 4}px`,
+          }}
+        >
+          {emoji}
+        </div>
+      ))}
+
+      {/* Floating Rakhis */}
       {[...Array(5)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute text-2xl"
-          style={{
-            left: `${10 + i * 18}%`,
-            bottom: -30,
-          }}
-          animate={{
-            y: [0, -window.innerHeight - 100],
-            rotate: [0, 360],
-          }}
-          transition={{
-            duration: 6 + Math.random() * 3,
-            delay: i * 1.2,
-            repeat: Infinity,
-            ease: "easeOut",
-          }}
+          className="absolute text-2xl pointer-events-none select-none"
+          style={{ left: `${8 + ((i * 18) % 84)}%`, bottom: -30 }}
+          animate={{ y: [0, -window.innerHeight - 100], rotate: [0, 360] }}
+          transition={{ duration: 6 + (i % 3), delay: i * 1.2, repeat: Infinity, ease: "easeOut" }}
         >
           🪢
         </motion.div>
@@ -63,16 +86,16 @@ export default function FinalScene({ onReplay }: FinalSceneProps) {
 
       {/* Heart burst */}
       {heartBurst && (
-        <div className="absolute inset-0 pointer-events-none z-30">
+        <div className="absolute inset-0 pointer-events-none z-40">
           {[...Array(20)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute left-1/2 top-1/2 text-2xl"
+              className="absolute left-1/2 top-1/2 text-2xl select-none"
               initial={{ scale: 0, x: 0, y: 0, opacity: 1 }}
               animate={{
                 scale: [0, 1.5, 0],
-                x: (Math.random() - 0.5) * 300,
-                y: (Math.random() - 0.5) * 300,
+                x: (Math.random() - 0.5) * 280,
+                y: (Math.random() - 0.5) * 280,
                 opacity: [1, 1, 0],
               }}
               transition={{ duration: 1.5 }}
@@ -84,136 +107,108 @@ export default function FinalScene({ onReplay }: FinalSceneProps) {
       )}
 
       {/* Diyas */}
-      <div className="absolute top-10 left-6 text-3xl animate-diya">🪔</div>
-      <div className="absolute top-8 right-8 text-2xl animate-diya" style={{ animationDelay: "0.5s" }}>🪔</div>
+      <div className="absolute top-8 left-6 text-3xl animate-diya opacity-80 select-none">🪔</div>
+      <div className="absolute top-8 right-8 text-2xl animate-diya opacity-80 select-none" style={{ animationDelay: "0.5s" }}>🪔</div>
 
-      {/* Main content */}
+      {/* Rakhi */}
       <motion.div
-        className="text-center z-10 px-6"
-        initial={{ y: 30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.3 }}
+        className="text-4xl select-none"
+        animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
       >
-        {/* Rakhi */}
-        <motion.div
-          className="text-5xl mb-6"
-          animate={{
-            scale: [1, 1.1, 1],
-            rotate: [0, 5, -5, 0],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          🪢
-        </motion.div>
-
-        {/* Title */}
-        <motion.h1
-          className="font-display text-white text-3xl sm:text-4xl mb-6 leading-snug"
-          style={{ textShadow: "0 2px 20px rgba(0,0,0,0.3)" }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          {cardData.finalTitle.replace("[SISTER_NAME]", cardData.sisterName).replace(
-            cardData.sisterName,
-            ""
-          )}
-          <br />
-          <span className="font-hand text-gold-light text-4xl sm:text-5xl">
-            {cardData.sisterName}
-          </span>{" "}
-          ❤️
-        </motion.h1>
-
-        {/* Message */}
-        <motion.p
-          className="font-hand text-white/90 text-xl sm:text-2xl leading-relaxed mb-6 max-w-sm mx-auto"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-        >
-          {cardData.finalMessage.split("\n").map((line, i) => (
-            <span key={i}>
-              {line}
-              <br />
-            </span>
-          ))}
-        </motion.p>
-
-        {/* Sign-off */}
-        <motion.p
-          className="font-display text-gold-light text-2xl sm:text-3xl italic"
-          style={{ textShadow: "0 1px 10px rgba(0,0,0,0.2)" }}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1.5, type: "spring" }}
-        >
-          {cardData.finalSignoff}
-        </motion.p>
-
-        {/* Heart button (easter egg) */}
-        <motion.button
-          className="mt-6 text-4xl select-none"
-          onClick={handleHeartClick}
-          whileTap={{ scale: 1.3 }}
-          animate={{
-            scale: [1, 1.15, 1],
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          aria-label="Love heart"
-        >
-          <Heart size={36} fill="#FFD6E0" className="text-pink-soft" />
-        </motion.button>
+        🪢
       </motion.div>
 
-      {/* Shinchan at bottom */}
-      <motion.div
-        className="mt-6 z-10"
-        initial={{ y: 50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 2, type: "spring" }}
+      {/* Title */}
+      <motion.h1
+        className="font-display text-white text-2xl sm:text-3xl font-bold leading-tight text-center z-10"
+        style={{ textShadow: "0 2px 20px rgba(0,0,0,0.3)" }}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
       >
-        <ShinchanAnimation
-          animation="happy"
-          size={180}
-          speechText="Love you Didi! ❤️"
+        Happy Raksha Bandhan
+        <br />
+        <span className="font-hand text-gold-light text-3xl sm:text-4xl font-bold">
+          {cardData.sisterName}
+        </span>{" "}
+        ❤️
+      </motion.h1>
+
+      {/* Message */}
+      <motion.p
+        className="font-hand text-white/95 text-base sm:text-lg leading-relaxed text-center max-w-xs font-bold z-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+      >
+        {cardData.finalMessage.split("\n").map((line, i) => (
+          <span key={i}>
+            {line}
+            <br />
+          </span>
+        ))}
+      </motion.p>
+
+      {/* Sign-off */}
+      <motion.p
+        className="font-display text-gold-light text-sm sm:text-base italic font-bold text-center z-10"
+        style={{ textShadow: "0 1px 10px rgba(0,0,0,0.2)" }}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 1, type: "spring" }}
+      >
+        {cardData.finalSignoff}
+      </motion.p>
+
+      {/* Interactive Heart */}
+      <motion.button
+        className="text-3xl select-none cursor-pointer p-1 rounded-full hover:bg-white/10 transition-colors z-10"
+        onClick={handleHeartClick}
+        whileTap={{ scale: 1.3 }}
+        animate={{ scale: [1, 1.15, 1] }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        aria-label="Love heart"
+      >
+        <Heart size={28} fill="#FFD6E0" className="text-pink-soft" />
+      </motion.button>
+
+      {/* Character Stage */}
+      <motion.div
+        className="z-10"
+        initial={{ y: 25, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 1.2, type: "spring" }}
+      >
+        <CharacterStage
+          size={120}
+          shinchanAnim="heart_love"
+          shinchanSpeech="Love you always Akka! ❤️"
+          sideMinions="both"
+          minionLeftAnim="happy"
+          minionLeftChar="bob"
+          minionRightAnim="cheer"
+          minionRightChar="stuart"
+          compact
         />
       </motion.div>
 
-      {/* Replay button */}
+      {/* Replay */}
       <motion.button
-        className="absolute bottom-6 z-20 flex items-center gap-2 px-6 py-2.5
-          bg-white/15 backdrop-blur-md text-white/80 rounded-full
-          text-sm font-medium border border-white/20
-          hover:bg-white/25 transition-colors select-none"
+        className="flex items-center gap-2 px-5 py-2
+          bg-white/20 backdrop-blur-md text-white rounded-full
+          text-xs font-semibold border border-white/25 cursor-pointer
+          hover:bg-white/30 transition-all select-none shadow-lg z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2.5 }}
+        transition={{ delay: 1.6 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={onReplay}
       >
-        <RotateCcw size={16} />
+        <RotateCcw size={14} />
         Replay the surprise
       </motion.button>
-
-      {/* Hindi text decoration */}
-      <motion.div
-        className="absolute bottom-2 text-white/10 text-[10px]"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 3 }}
-      >
-        रक्षाबंधन की शुभकामनाएँ ❤️
-      </motion.div>
     </motion.div>
   );
 }

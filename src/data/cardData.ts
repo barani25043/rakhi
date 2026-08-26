@@ -41,25 +41,26 @@ export interface CardDataType {
 }
 
 const cardData: CardDataType = {
-  sisterName: "Didi",
+  sisterName: "Akka",
 
-  browserTitle: "Brother's Secret Gift 💝",
+  browserTitle: "Thambi's Secret Gift 💝",
   browserUrl: "special-surprise.local",
 
   introTitle: "IMAGINE receiving this\non Raksha Bandhan 🥹❤️",
-  introSubtitle: "For the most special sister...",
+  introSubtitle: "For the most special Akka...",
   introButton: "OPEN YOUR SURPRISE ✨",
 
-  characterGreeting: "Heyyy! I made something\nspecial for you! ❤️",
+  characterGreeting: "Heyyy Akka! I made something\nspecial for you! ❤️",
   characterQuestion: "Do you wanna see it?",
   noReactions: [
-    "Are you REALLY sure? 🥺",
-    "Come on please!! 😭",
-    "Nice try 😌\nYou HAVE to see this!",
+    "Akka, are you REALLY sure? 🥺",
+    "Akka come on please!! 😭",
+    "Aiyoo Akka! The button is getting too big!! 💣",
+    "BOOM! 💥 Thambi won! You have to see this! 😌❤️",
   ],
 
-  letterHeader: "To My Forever Best Sister ❤️",
-  letter: `Dear Didi,
+  letterHeader: "To My Forever Best Akka ❤️",
+  letter: `Dear Akka,
 
 I don't always say it,
 but I'm genuinely grateful to have you in my life.
@@ -76,15 +77,15 @@ to annoying each other for no reason...
 Life feels brighter because you're in it.
 
 No matter how much we grow,
-you'll always be my sister,
-my friend,
-and one of my favorite people.
+you'll always be my Akka,
+my best friend,
+and my favorite person.
 
-Happy Raksha Bandhan ❤️
+Happy Raksha Bandhan Akka ❤️
 
 Always stay happy.
 Always keep smiling.`,
-  letterSignature: "With lots of love,\nYour Brother ❤️",
+  letterSignature: "With lots of love,\nYour Thambi ❤️",
 
   memoriesTitle: "MEMORIES ❤️",
   memoriesSubtitle: "A few moments I'll always keep close.",
@@ -93,48 +94,48 @@ Always keep smiling.`,
     {
       image: "/assets/sister/photo1.jpg",
       caption: "Partners in crime ❤️",
-      alt: "Memory photo 1 with sister",
+      alt: "Memory photo 1 with Akka",
       rotation: -4,
       shinchanAnimation: "peek",
     },
     {
       image: "/assets/sister/photo2.jpg",
       caption: "That one crazy day 😂",
-      alt: "Memory photo 2 with sister",
+      alt: "Memory photo 2 with Akka",
       rotation: 3,
       shinchanAnimation: "walk",
     },
     {
       image: "/assets/sister/photo3.jpg",
       caption: "Forever memories 💕",
-      alt: "Memory photo 3 with sister",
+      alt: "Memory photo 3 with Akka",
       rotation: -2,
       shinchanAnimation: "happy",
     },
     {
       image: "/assets/sister/photo4.jpg",
       caption: "Best moments 🌟",
-      alt: "Memory photo 4 with sister",
+      alt: "Memory photo 4 with Akka",
       rotation: 5,
       shinchanAnimation: "gift",
     },
     {
       image: "/assets/sister/photo5.jpg",
       caption: "Us being us 😜",
-      alt: "Memory photo 5 with sister",
+      alt: "Memory photo 5 with Akka",
       rotation: -3,
       shinchanAnimation: "cry",
     },
     {
       image: "/assets/sister/photo6.jpg",
       caption: "Always together 🤗",
-      alt: "Memory photo 6 with sister",
+      alt: "Memory photo 6 with Akka",
       rotation: 2,
       shinchanAnimation: "jump",
     },
   ],
 
-  awardTitle: "BEST SISTER AWARD 🏆",
+  awardTitle: "BEST AKKA AWARD 🏆",
   awardPresentation: "This award is proudly presented to",
   awardQualities: [
     "Being annoying (lovingly)",
@@ -145,11 +146,11 @@ Always keep smiling.`,
   ],
   awardRating: "∞ / 10",
 
-  finalTitle: "Happy Raksha Bandhan ❤️",
+  finalTitle: "Happy Raksha Bandhan Akka ❤️",
   finalMessage: `No matter where life takes us,
 you'll always have a special place
 in my heart.`,
-  finalSignoff: "Love you always ❤️",
+  finalSignoff: "Love you always Akka — Your Thambi ❤️",
 };
 
 export default cardData;

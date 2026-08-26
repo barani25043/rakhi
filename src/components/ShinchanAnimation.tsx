@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { TargetAndTransition } from "framer-motion";
 
@@ -11,15 +11,24 @@ export type ShinchanAnimationType =
   | "jump"
   | "gift"
   | "peek"
-  | "dance";
+  | "dance"
+  | "action_kamen"
+  | "pajama"
+  | "rakhi_special"
+  | "mischief"
+  | "heart_love";
+
+export type ShinchanCostumeType = "classic" | "action_kamen" | "pajama" | "rakhi_special";
 
 interface ShinchanAnimationProps {
-  animation: ShinchanAnimationType;
+  animation?: ShinchanAnimationType;
+  costume?: ShinchanCostumeType;
   size?: number;
   className?: string;
   onClick?: () => void;
   showSpeechBubble?: boolean;
   speechText?: string;
+  interactive?: boolean;
 }
 
 const ASSET_MAP: Record<string, string> = {
@@ -32,27 +41,48 @@ const ASSET_MAP: Record<string, string> = {
   gift: "/assets/shinchan/gift.png",
   peek: "/assets/shinchan/idle.png",
   dance: "/assets/shinchan/dance.png",
+  action_kamen: "/assets/shinchan/action_kamen.png",
+  pajama: "/assets/shinchan/pajama.png",
+  rakhi_special: "/assets/shinchan/rakhi_special.png",
+  mischief: "/assets/shinchan/mischief.png",
+  heart_love: "/assets/shinchan/heart_love.png",
 };
 
 const DEFAULT_SPEECH: Record<string, string> = {
   idle: "Hehehe! 🤪",
-  wave: "Heyyy Didi! 👋",
+  wave: "Heyyy Akka! 👋",
   happy: "YAAAAAY!! 🎉",
-  cry: "Don't say no! 😭",
+  cry: "Don't say no Akka! 😭",
   jump: "BOINGGG!! 🚀",
-  gift: "Special gift for you! 🎁",
+  gift: "Special gift for you Akka! 🎁",
   dance: "Buri Buri Dance! 💃",
   peek: "Peek-a-boo! 👀",
   walk: "Walking around~ 🎶",
+  action_kamen: "Action Kamen BEAM!! ⚡🦸‍♂️",
+  pajama: "Pajama party Akka! 😴✨",
+  rakhi_special: "Happy Raksha Bandhan Akka! 🪢❤️",
+  mischief: "Chocochips for me? 🍫😜",
+  heart_love: "Love you always Akka! 💖✨",
 };
 
-// 3D motion keyframe configs per animation state
-// Each has rotateX, rotateY, rotateZ for 3D tilt + standard translate/scale
+const FUNNY_QUOTES = [
+  "Action Kamen BEAM!! ⚡",
+  "Akka, 500rs for Choco-chips please! 🍫",
+  "Buri Buri Zaemon to the rescue! 🐷",
+  "Am I looking handsome today Akka? 😳",
+  "Oooh la la! Beautiful Akka! 💖",
+  "I won't steal your snacks! (Maybe) 😜",
+  "Buri Buri Butt Dance! 💃",
+  "Happy Rakhi to the best Akka! 🪢",
+  "Let's eat all the laddoos Akka! 🟡😋",
+];
+
+// 3D perspective keyframes per animation
 const animation3DConfigs: Record<
   string,
   {
-    container: object; // applied to the 3D perspective wrapper
-    inner: object; // applied to the image div (standard transforms)
+    container: object;
+    inner: object;
   }
 > = {
   idle: {
@@ -98,6 +128,70 @@ const animation3DConfigs: Record<
       transition: { duration: 0.7, repeat: Infinity, ease: "easeInOut" },
     },
   },
+  action_kamen: {
+    container: {
+      rotateX: [0, -15, 10, 0],
+      rotateY: [-15, 15, -10, 0],
+      rotateZ: [-5, 5, -5, 0],
+      transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut" },
+    },
+    inner: {
+      y: [0, -15, 0],
+      scale: [1, 1.06, 1],
+      transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut" },
+    },
+  },
+  pajama: {
+    container: {
+      rotateZ: [-4, 4, -4, 4, 0],
+      rotateX: [4, -4, 4, -4, 0],
+      transition: { duration: 3.2, repeat: Infinity, ease: "easeInOut" },
+    },
+    inner: {
+      y: [0, -6, 0, -6, 0],
+      scaleX: [1, 1.03, 0.98, 1],
+      scaleY: [1, 0.98, 1.03, 1],
+      transition: { duration: 3.2, repeat: Infinity, ease: "easeInOut" },
+    },
+  },
+  rakhi_special: {
+    container: {
+      rotateY: [-10, 10, -10, 10, 0],
+      rotateX: [6, 0, 6, 0],
+      transition: { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
+    },
+    inner: {
+      y: [0, -8, 0, -8, 0],
+      scale: [1, 1.04, 1],
+      transition: { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
+    },
+  },
+  mischief: {
+    container: {
+      rotateZ: [-6, 6, -6, 6, 0],
+      rotateY: [-12, 12, -12, 12, 0],
+      transition: { duration: 1.6, repeat: Infinity, ease: "easeInOut" },
+    },
+    inner: {
+      y: [0, -10, 0],
+      scaleX: [1, 1.08, 0.95, 1],
+      scaleY: [1, 0.94, 1.08, 1],
+      transition: { duration: 1.6, repeat: Infinity, ease: "easeInOut" },
+    },
+  },
+  heart_love: {
+    container: {
+      rotateX: [0, 12, -8, 0],
+      rotateY: [-10, 10, -10, 0],
+      rotateZ: [-4, 4, -4, 0],
+      transition: { duration: 1.8, repeat: Infinity, ease: "easeInOut" },
+    },
+    inner: {
+      y: [0, -16, 0],
+      scale: [1, 1.1, 1],
+      transition: { duration: 1.8, repeat: Infinity, ease: "easeInOut" },
+    },
+  },
   walk: {
     container: {
       rotateY: [-8, 8, -8, 8],
@@ -108,11 +202,11 @@ const animation3DConfigs: Record<
       },
     },
     inner: {
-      x: [-100, 100],
+      x: [-80, 80],
       y: [0, -10, 0, -10, 0],
       scaleY: [1, 1.04, 0.96, 1.04, 1],
       transition: {
-        x: { duration: 4.5, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" as const },
+        x: { duration: 4, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" as const },
         y: { duration: 0.4, repeat: Infinity, ease: "easeInOut" },
         scaleY: { duration: 0.4, repeat: Infinity, ease: "easeInOut" },
       },
@@ -174,7 +268,7 @@ const animation3DConfigs: Record<
       },
     },
     inner: {
-      x: [40, 0],
+      x: [35, 0],
       y: [0, -8, 0],
       scale: [0.85, 1.04, 1],
       transition: {
@@ -198,80 +292,101 @@ const animation3DConfigs: Record<
   },
 };
 
-const FUNNY_QUOTES = [
-  "Action Kamen BEAM!! ⚡",
-  "Didi, 500rs for Choco-chips please! 🍫",
-  "Buri Buri Zaemon to the rescue! 🐷",
-  "Am I looking handsome today Didi? 😳",
-  "Oooh la la! Beautiful Didi! 💖",
-  "I won't steal your snacks! (Maybe) 😜",
-  "Buri Buri Butt Dance! 💃",
-];
-
-// Cartoon sound effects synthesizer using Web Audio API
-function playCartoonSound(type: "boing" | "pop" | "cheer") {
+// Web Audio sound synthesizer for Shinchan sounds
+function playCartoonSound(type: "boing" | "pop" | "cheer" | "beam") {
   try {
-    const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const AudioCtx =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     const ctx = new AudioCtx();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
     const now = ctx.currentTime;
 
-    if (type === "boing") {
+    if (type === "beam") {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(200, now);
+      osc.frequency.linearRampToValueAtTime(1400, now + 0.35);
+      gain.gain.setValueAtTime(0.3, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.4);
+    } else if (type === "boing") {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
       osc.type = "sine";
       osc.frequency.setValueAtTime(150, now);
       osc.frequency.exponentialRampToValueAtTime(600, now + 0.3);
       gain.gain.setValueAtTime(0.3, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
       osc.start(now);
       osc.stop(now + 0.3);
     } else if (type === "pop") {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
       osc.type = "triangle";
       osc.frequency.setValueAtTime(400, now);
       osc.frequency.exponentialRampToValueAtTime(1200, now + 0.15);
       gain.gain.setValueAtTime(0.4, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
       osc.start(now);
       osc.stop(now + 0.15);
     } else {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
       osc.type = "sine";
       osc.frequency.setValueAtTime(523.25, now);
       osc.frequency.setValueAtTime(659.25, now + 0.1);
       osc.frequency.setValueAtTime(783.99, now + 0.2);
       gain.gain.setValueAtTime(0.25, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
       osc.start(now);
       osc.stop(now + 0.4);
     }
   } catch {
-    // Web Audio blocked
+    // Audio blocked
   }
 }
 
 export default function ShinchanAnimation({
-  animation,
-  size = 130,
+  animation = "idle",
+  costume,
+  size = 140,
   className = "",
   onClick,
   showSpeechBubble = true,
   speechText,
+  interactive = true,
 }: ShinchanAnimationProps) {
   const [activeCombo, setActiveCombo] = useState<ShinchanAnimationType | null>(null);
   const [funnyQuote, setFunnyQuote] = useState<string | null>(null);
-  const [popProps, setPopProps] = useState<Array<{ id: number; icon: string; x: number; y: number }>>([]);
+  const [popProps, setPopProps] = useState<
+    Array<{ id: number; icon: string; x: number; y: number }>
+  >([]);
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const currentAnim = activeCombo || animation;
+  let determinedAnim: ShinchanAnimationType = animation;
+  if (costume === "action_kamen" && animation === "idle") determinedAnim = "action_kamen";
+  if (costume === "pajama" && animation === "idle") determinedAnim = "pajama";
+  if (costume === "rakhi_special" && animation === "idle") determinedAnim = "rakhi_special";
+
+  const currentAnim = activeCombo || determinedAnim;
   const imgSrc = ASSET_MAP[currentAnim] || ASSET_MAP.idle;
   const config = animation3DConfigs[currentAnim] || animation3DConfigs.idle;
   const speech = funnyQuote || speechText || DEFAULT_SPEECH[currentAnim] || "Hehehe! ❤️";
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
     setTilt({
@@ -285,56 +400,68 @@ export default function ShinchanAnimation({
   };
 
   const handleTap = () => {
-    playCartoonSound(currentAnim === "jump" ? "boing" : "pop");
+    if (!interactive) return;
 
-    // Random funny quote on tap
+    playCartoonSound(
+      currentAnim === "action_kamen"
+        ? "beam"
+        : currentAnim === "jump"
+          ? "boing"
+          : "pop"
+    );
+
     const randomQ = FUNNY_QUOTES[Math.floor(Math.random() * FUNNY_QUOTES.length)];
     setFunnyQuote(randomQ);
     setTimeout(() => setFunnyQuote(null), 2500);
 
-    // Pop funny 3D props (Choco-chips 🍫, Action Kamen 🎭, Hearts ❤️)
-    const icons = ["🍫", "🎭", "❤️", "⚡", "⭐", "🎉"];
+    const icons = ["🍫", "🎭", "❤️", "⚡", "⭐", "🎉", "🪢", "🟡"];
     const newProps = Array.from({ length: 6 }, (_, i) => ({
       id: Date.now() + i,
       icon: icons[Math.floor(Math.random() * icons.length)],
-      x: (Math.random() - 0.5) * 120,
-      y: (Math.random() - 0.5) * 100,
+      x: (Math.random() - 0.5) * 130,
+      y: (Math.random() - 0.5) * 110,
     }));
     setPopProps(newProps);
     setTimeout(() => setPopProps([]), 1200);
 
     if (!activeCombo) {
       setActiveCombo("dance");
-      setTimeout(() => setActiveCombo("jump"), 800);
-      setTimeout(() => setActiveCombo("happy"), 1600);
-      setTimeout(() => setActiveCombo(null), 2400);
+      setTimeout(() => setActiveCombo("jump"), 700);
+      setTimeout(() => setActiveCombo("happy"), 1400);
+      setTimeout(() => setActiveCombo(null), 2100);
     }
     if (onClick) onClick();
   };
 
   return (
-    <div className={`relative flex flex-col items-center justify-center ${className}`}>
-      {/* Speech Bubble */}
+    <div
+      ref={containerRef}
+      className={`relative flex flex-col items-center justify-center ${className}`}
+    >
+      {/* Speech Bubble — in normal document flow, not absolute */}
       <AnimatePresence mode="wait">
         {showSpeechBubble && (
           <motion.div
             key={currentAnim + speech}
-            className="absolute -top-16 sm:-top-20 z-30 px-3.5 py-1.5 bg-white/95 rounded-full shadow-lg border border-pink-200 pointer-events-none"
-            initial={{ opacity: 0, y: 10, scale: 0.7 }}
+            className="mb-1 z-30 px-3 py-1 bg-white/95 backdrop-blur-md rounded-full shadow-md border border-pink-200 pointer-events-none flex items-center gap-1.5 whitespace-nowrap self-center"
+            initial={{ opacity: 0, y: 6, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -8, scale: 0.7 }}
-            transition={{ duration: 0.3, type: "spring" }}
+            exit={{ opacity: 0, y: -4, scale: 0.85 }}
+            transition={{ duration: 0.25, type: "spring" }}
           >
-            <p className="font-hand text-xs sm:text-sm font-bold text-rose-600 whitespace-nowrap">
+            <span className="text-xs">🖍️</span>
+            <p className="font-hand text-xs font-bold text-rose-600">
               {speech}
             </p>
-            <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-6 border-l-transparent border-r-transparent border-t-white/95" />
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Speed lines for high-energy animations */}
-      {(currentAnim === "dance" || currentAnim === "jump" || currentAnim === "happy") && (
+      {/* Speed lines */}
+      {(currentAnim === "dance" ||
+        currentAnim === "jump" ||
+        currentAnim === "happy" ||
+        currentAnim === "action_kamen") && (
         <motion.div
           className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center"
           animate={{ rotate: [0, 360] }}
@@ -343,7 +470,7 @@ export default function ShinchanAnimation({
           {[...Array(8)].map((_, i) => (
             <div
               key={i}
-              className="absolute w-full h-[1px] bg-gradient-to-r from-transparent via-yellow-400/40 to-transparent"
+              className="absolute w-full h-[1px] bg-gradient-to-r from-transparent via-rose-400/40 to-transparent"
               style={{ transform: `rotate(${i * 22.5}deg)` }}
             />
           ))}
@@ -374,7 +501,7 @@ export default function ShinchanAnimation({
 
       {/* 3D Perspective Container */}
       <div
-        className="cursor-pointer"
+        className="cursor-pointer select-none"
         style={{
           perspective: 600,
           perspectiveOrigin: "50% 50%",
@@ -384,7 +511,7 @@ export default function ShinchanAnimation({
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
-        {/* 3D Rotation Layer — rotateX/Y/Z for tilt depth */}
+        {/* 3D Rotation Layer */}
         <motion.div
           className="w-full h-full"
           style={{
@@ -398,7 +525,7 @@ export default function ShinchanAnimation({
           }}
           transition={{ type: "spring", stiffness: 200, damping: 15 }}
         >
-          {/* Inner transform layer — translate, scale, squash & stretch */}
+          {/* Inner transform layer */}
           <motion.div
             className="relative w-full h-full select-none cursor-pointer z-10"
             style={{ transformStyle: "preserve-3d" }}
@@ -407,13 +534,13 @@ export default function ShinchanAnimation({
             whileHover={{ scale: 1.1, rotateY: 12, rotateX: -8 }}
             whileTap={{ scale: 0.88, rotateX: 18 }}
           >
-            {/* The character image — transparent PNG, no mix-blend needed */}
+            {/* 2D Character Image */}
             <img
               src={imgSrc}
               alt={`Shinchan ${currentAnim}`}
               className="w-full h-full object-contain transition-all duration-200"
               style={{
-                filter: "drop-shadow(4px 6px 8px rgba(0,0,0,0.25))",
+                filter: "drop-shadow(4px 6px 10px rgba(0,0,0,0.25))",
                 backfaceVisibility: "hidden",
               }}
               draggable={false}
@@ -440,12 +567,12 @@ export default function ShinchanAnimation({
               }}
             />
 
-            {/* 3D-positioned depth glow behind character */}
+            {/* Depth glow */}
             <motion.div
               className="absolute inset-0 rounded-full pointer-events-none -z-10"
               style={{
                 background:
-                  "radial-gradient(ellipse at center, rgba(232,69,107,0.15) 0%, transparent 70%)",
+                  "radial-gradient(ellipse at center, rgba(232,69,107,0.18) 0%, transparent 70%)",
                 transform: "translateZ(-20px) scale(1.2)",
               }}
               animate={{
@@ -454,102 +581,11 @@ export default function ShinchanAnimation({
               }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
-
-            {/* Motion particles */}
-            {currentAnim === "cry" && (
-              <>
-                {[...Array(6)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute text-sm select-none pointer-events-none"
-                    style={{
-                      left: `${20 + (i % 3) * 25}%`,
-                      top: "32%",
-                      transform: "translateZ(10px)",
-                    }}
-                    animate={{
-                      y: [0, 50],
-                      x: [0, i % 2 === 0 ? 10 : -10],
-                      opacity: [1, 0],
-                      scale: [0.8, 1.3, 0],
-                    }}
-                    transition={{
-                      duration: 0.65,
-                      delay: i * 0.12,
-                      repeat: Infinity,
-                      ease: "easeIn",
-                    }}
-                  >
-                    💧
-                  </motion.div>
-                ))}
-              </>
-            )}
-
-            {(currentAnim === "dance" ||
-              currentAnim === "happy" ||
-              currentAnim === "gift") && (
-              <>
-                {[...Array(5)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute text-base select-none pointer-events-none"
-                    style={{
-                      right: `${-15 + i * 18}%`,
-                      top: "0%",
-                      transform: `translateZ(${15 + i * 5}px)`,
-                    }}
-                    animate={{
-                      y: [0, -35],
-                      x: [0, i % 2 === 0 ? 15 : -15],
-                      opacity: [1, 0],
-                      scale: [0.5, 1.2, 0.4],
-                    }}
-                    transition={{
-                      duration: 1.2,
-                      delay: i * 0.25,
-                      repeat: Infinity,
-                      ease: "easeOut",
-                    }}
-                  >
-                    {i % 3 === 0 ? "❤️" : i % 3 === 1 ? "✨" : "🎶"}
-                  </motion.div>
-                ))}
-              </>
-            )}
-
-            {(currentAnim === "jump" || currentAnim === "wave") && (
-              <>
-                {[...Array(4)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute text-xs select-none pointer-events-none"
-                    style={{
-                      left: `${5 + i * 30}%`,
-                      top: `${-15 + (i % 2) * 25}%`,
-                      transform: `translateZ(${20 + i * 3}px)`,
-                    }}
-                    animate={{
-                      scale: [0, 1.4, 0],
-                      rotate: [0, 180],
-                      opacity: [0, 1, 0],
-                    }}
-                    transition={{
-                      duration: 0.9,
-                      delay: i * 0.2,
-                      repeat: Infinity,
-                    }}
-                  >
-                    ⭐
-                  </motion.div>
-                ))}
-              </>
-            )}
           </motion.div>
         </motion.div>
       </div>
 
-      {/* 3D-responsive ground shadow — gets wider/narrower as character tilts */}
+      {/* 3D Ground shadow */}
       <motion.div
         className="pointer-events-none z-0"
         style={{
@@ -566,17 +602,8 @@ export default function ShinchanAnimation({
               ? [1, 0.25, 1.4, 1]
               : currentAnim === "dance"
                 ? [0.7, 1.4, 0.7]
-                : currentAnim === "happy"
-                  ? [0.8, 1.2, 0.8]
-                  : [1, 1.15, 1],
-          scaleY:
-            currentAnim === "jump"
-              ? [1, 0.5, 1.3, 1]
-              : [1, 0.8, 1],
-          opacity:
-            currentAnim === "jump"
-              ? [0.25, 0.06, 0.35, 0.25]
-              : [0.3, 0.15, 0.3],
+                : [1, 1.15, 1],
+          opacity: currentAnim === "jump" ? [0.25, 0.06, 0.35, 0.25] : [0.3, 0.15, 0.3],
         }}
         transition={{
           duration: currentAnim === "jump" ? 0.65 : currentAnim === "dance" ? 0.35 : 1.4,

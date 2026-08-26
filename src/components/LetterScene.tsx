@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import FloatingHearts from "./FloatingHearts";
-import ShinchanAnimation from "./ShinchanAnimation";
+import CharacterStage from "./CharacterStage";
 import cardData from "../data/cardData";
 
 interface LetterSceneProps {
@@ -14,8 +14,8 @@ export default function LetterScene({ onNext }: LetterSceneProps) {
   const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setShowContent(true), 600);
-    const t2 = setTimeout(() => setShowButton(true), 2500);
+    const t1 = setTimeout(() => setShowContent(true), 500);
+    const t2 = setTimeout(() => setShowButton(true), 2000);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
@@ -26,7 +26,7 @@ export default function LetterScene({ onNext }: LetterSceneProps) {
 
   return (
     <motion.div
-      className="relative w-full h-full flex flex-col items-center justify-start overflow-y-auto overflow-x-hidden no-scrollbar"
+      className="relative w-full h-full flex flex-col items-center overflow-y-auto overflow-x-hidden no-scrollbar py-4 px-3"
       style={{
         background:
           "linear-gradient(180deg, #FFF0F3 0%, #FFE8D6 30%, #FFF8F0 60%, #FFD6E0 100%)",
@@ -39,76 +39,75 @@ export default function LetterScene({ onNext }: LetterSceneProps) {
       <FloatingHearts count={6} color="#FFB6C1" />
 
       {/* Decorative flowers */}
-      {["🌸", "🌺", "💮", "🌼"].map((flower, i) => (
+      {["🌸", "🌺", "💮", "🌼", "✨"].map((flower, i) => (
         <motion.div
           key={i}
-          className="absolute text-xl opacity-30"
+          className="absolute text-lg opacity-25 select-none pointer-events-none"
           style={{
-            left: i % 2 === 0 ? `${5 + i * 3}%` : undefined,
-            right: i % 2 !== 0 ? `${5 + i * 3}%` : undefined,
-            top: `${15 + i * 18}%`,
+            left: i % 2 === 0 ? `${3 + i * 4}%` : undefined,
+            right: i % 2 !== 0 ? `${3 + i * 4}%` : undefined,
+            top: `${10 + i * 18}%`,
           }}
-          animate={{
-            rotate: [0, 10, -10, 0],
-            y: [0, -5, 5, 0],
-          }}
-          transition={{
-            duration: 4 + i,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          animate={{ rotate: [0, 10, -10, 0], y: [0, -5, 5, 0] }}
+          transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut" }}
         >
           {flower}
         </motion.div>
       ))}
 
-      {/* Shinchan Presenter Host */}
+      {/* Top Shinchan Presenter */}
       <motion.div
-        className="mt-6 mb-2 z-10"
-        initial={{ opacity: 0, y: -20 }}
+        className="w-full flex justify-center mb-3 z-10 shrink-0"
+        initial={{ opacity: 0, y: -15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: 0.2 }}
       >
-        <ShinchanAnimation
-          animation="gift"
-          size={170}
-          speechText="Read my letter Didi! 📜"
+        <CharacterStage
+          size={110}
+          shinchanAnim="pajama"
+          shinchanSpeech="Read my letter Akka! 📜❤️"
+          sideMinions="both"
+          minionLeftAnim="wave"
+          minionLeftChar="bob"
+          minionRightAnim="ukulele"
+          minionRightChar="stuart"
+          compact
         />
       </motion.div>
 
-      {/* Letter paper */}
+      {/* Letter Parchment Paper */}
       <motion.div
-        className="relative w-[90%] max-w-[420px] mt-4 mb-28"
-        initial={{ y: 100, opacity: 0 }}
+        className="relative w-[94%] max-w-[420px] mb-20 z-20 shrink-0"
+        initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, type: "spring" }}
       >
         <div
-          className="bg-warm-paper rounded-lg shadow-xl p-7 sm:p-8 paper-texture animate-unfold"
+          className="bg-warm-paper rounded-2xl shadow-2xl p-5 sm:p-7 paper-texture relative border border-amber-100"
           style={{
             boxShadow:
-              "0 4px 30px rgba(107, 29, 42, 0.1), 0 2px 10px rgba(0,0,0,0.05)",
+              "0 10px 40px rgba(107, 29, 42, 0.12), 0 2px 10px rgba(0,0,0,0.06)",
           }}
         >
-          {/* Decorative top corner */}
-          <div className="absolute top-3 left-3 text-gold/40 text-lg">❧</div>
-          <div className="absolute top-3 right-3 text-gold/40 text-lg" style={{ transform: "scaleX(-1)" }}>❧</div>
-
-          {/* Wax seal */}
+          {/* Wax Seal */}
           <motion.div
-            className="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 
-              bg-gradient-to-br from-red-rakhi to-burgundy rounded-full 
-              flex items-center justify-center shadow-lg border-2 border-red-deep z-20"
+            className="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10
+              bg-gradient-to-br from-red-rakhi to-burgundy rounded-full
+              flex items-center justify-center shadow-xl border-2 border-red-300 z-30"
             initial={{ scale: 0, rotate: -180 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ delay: 0.4, type: "spring" }}
           >
-            <span className="text-gold-light text-xl">❤</span>
+            <span className="text-gold-light text-lg">❤</span>
           </motion.div>
+
+          {/* Corner Ornaments */}
+          <div className="absolute top-2 left-2 text-gold/40 text-sm select-none">❧</div>
+          <div className="absolute top-2 right-2 text-gold/40 text-sm select-none" style={{ transform: "scaleX(-1)" }}>❧</div>
 
           {/* Header */}
           <motion.h2
-            className="font-display text-center text-burgundy text-xl sm:text-2xl mb-6 mt-5 pt-3 leading-snug"
+            className="font-display text-center text-burgundy text-lg sm:text-xl mb-3 mt-4 leading-snug font-bold"
             initial={{ opacity: 0 }}
             animate={{ opacity: showContent ? 1 : 0 }}
             transition={{ duration: 0.5 }}
@@ -116,29 +115,26 @@ export default function LetterScene({ onNext }: LetterSceneProps) {
             {cardData.letterHeader}
           </motion.h2>
 
-          {/* Decorative line */}
+          {/* Gold Divider */}
           <motion.div
-            className="w-16 h-[1px] bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6"
+            className="w-16 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-4"
             initial={{ scaleX: 0 }}
             animate={{ scaleX: showContent ? 1 : 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
           />
 
-          {/* Letter body */}
-          <div className="font-hand text-lg sm:text-xl text-gray-700 leading-relaxed space-y-1">
+          {/* Letter Body */}
+          <div className="font-hand text-base sm:text-lg text-gray-700 leading-relaxed space-y-0.5 font-semibold">
             {letterLines.map((line, i) => (
               <motion.p
                 key={i}
-                className={line.trim() === "" ? "h-3" : ""}
-                initial={{ opacity: 0, x: -10 }}
+                className={line.trim() === "" ? "h-2" : ""}
+                initial={{ opacity: 0, x: -8 }}
                 animate={{
                   opacity: showContent ? 1 : 0,
-                  x: showContent ? 0 : -10,
+                  x: showContent ? 0 : -8,
                 }}
-                transition={{
-                  delay: 0.5 + i * 0.06,
-                  duration: 0.4,
-                }}
+                transition={{ delay: 0.4 + i * 0.03, duration: 0.3 }}
               >
                 {line}
               </motion.p>
@@ -147,36 +143,40 @@ export default function LetterScene({ onNext }: LetterSceneProps) {
 
           {/* Signature */}
           <motion.div
-            className="mt-8 text-right font-hand text-xl text-rose-600"
+            className="mt-5 text-right font-hand text-lg text-rose-600 font-bold"
             initial={{ opacity: 0 }}
             animate={{ opacity: showContent ? 1 : 0 }}
-            transition={{ delay: 2.2, duration: 0.6 }}
+            transition={{ delay: 1.6, duration: 0.6 }}
           >
             {cardData.letterSignature.split("\n").map((line, i) => (
               <p key={i}>{line}</p>
             ))}
           </motion.div>
 
-          {/* Bottom decorative corner */}
-          <div className="absolute bottom-3 left-3 text-gold/40 text-lg" style={{ transform: "scaleY(-1)" }}>❧</div>
-          <div className="absolute bottom-3 right-3 text-gold/40 text-lg" style={{ transform: "scale(-1)" }}>❧</div>
+          {/* Bottom Corners */}
+          <div className="absolute bottom-2 left-2 text-gold/40 text-sm select-none" style={{ transform: "scaleY(-1)" }}>❧</div>
+          <div className="absolute bottom-2 right-2 text-gold/40 text-sm select-none" style={{ transform: "scale(-1)" }}>❧</div>
         </div>
 
-        {/* Continue button */}
+        {/* Continue */}
         {showButton && (
-          <motion.button
-            className="mt-8 mx-auto flex items-center gap-2 px-8 py-3
-              bg-gradient-to-r from-burgundy to-maroon text-white
-              rounded-full font-medium shadow-lg shimmer select-none"
-            initial={{ opacity: 0, y: 20 }}
+          <motion.div
+            className="mt-5 flex justify-center"
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={onNext}
           >
-            Continue
-            <ChevronRight size={18} />
-          </motion.button>
+            <motion.button
+              className="flex items-center gap-2 px-8 py-3
+                bg-gradient-to-r from-burgundy to-maroon text-white
+                rounded-full font-medium shadow-xl shimmer select-none cursor-pointer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onNext}
+            >
+              Continue
+              <ChevronRight size={18} />
+            </motion.button>
+          </motion.div>
         )}
       </motion.div>
     </motion.div>
