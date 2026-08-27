@@ -48,9 +48,9 @@ const cardData: CardDataType = {
   browserTitle: "Thambi's Secret Gift 💝",
   browserUrl: "special-surprise.local",
 
-  introTitle: "IMAGINE receiving this\non Raksha Bandhan 🥹❤️",
-  introSubtitle: "For the most special Akka...",
-  introButton: "OPEN YOUR SURPRISE ✨",
+  introTitle: "என் அன்பு அக்காவுக்கு...\nஒரு இனிய சர்ப்ரைஸ் 🥹❤️",
+  introSubtitle: "A Lovely Raksha Bandhan Surprise For My Dear Akka ✨",
+  introButton: "SURPRISE-ஐ திறக்க இங்கே கிளிக் செய்யவும் ✨",
 
   characterGreeting: "Heyyy Akka! I made something\nspecial for you! ❤️",
   characterQuestion: "Do you wanna see it?",
@@ -61,75 +61,73 @@ const cardData: CardDataType = {
     "BOOM! 💥 Thambi won! You have to see this! 😌❤️",
   ],
 
-  letterHeader: "To My Forever Best Akka ❤️",
-  letter: `Dear Akka,
+  letterHeader: "To My Lovely Sweet Akka ❤️",
+  letter: `To the best sister and my everything,
 
-I don't always say it,
-but I'm genuinely grateful to have you in my life.
+Happy Raksha Bandhan to my lovely, sweet Akka! ❤️
+
+I may not always say it out loud,
+but you are truly the greatest gift in my life.
+My world is complete and full of happiness
+just having you by my side.
 
 You've been my biggest supporter,
-my secret keeper,
-my partner in all the random nonsense,
-and one of the most important people in my life.
+my secret keeper, my guide,
+and my favorite person in the whole universe.
 
-From endless talks to silly fights,
-from laughing at absolutely nothing
-to annoying each other for no reason...
+I hope and pray from the bottom of my heart
+that we will be brother and sister forever...
+And even in every birth to come (ஏழு ஜென்மத்துக்கும்),
+I only wish and pray that YOU are my Akka.
 
-Life feels brighter because you're in it.
+No matter where life takes us,
+you'll always have the most special place in my heart.
 
-No matter how much we grow,
-you'll always be my Akka,
-my best friend,
-and my favorite person.
-
-Happy Raksha Bandhan Akka ❤️
-
-Always stay happy.
-Always keep smiling.`,
-  letterSignature: "With lots of love,\nYour Thambi ❤️",
+Happy Raksha Bandhan Akka! 🪢✨
+Always stay happy and keep smiling!`,
+  letterSignature: "With endless love & affection,\nYour Thambi ❤️",
 
   memoriesTitle: "MEMORIES ❤️",
   memoriesSubtitle: "A few moments I'll always keep close.",
 
   memories: [
     {
-      image: getAssetPath("assets/sister/photo1.jpg"),
+      image: getAssetPath("assets/sister/photo1.jpeg"),
       caption: "Partners in crime ❤️",
       alt: "Memory photo 1 with Akka",
       rotation: -4,
       shinchanAnimation: "peek",
     },
     {
-      image: getAssetPath("assets/sister/photo2.jpg"),
+      image: getAssetPath("assets/sister/photo2.jpeg"),
       caption: "That one crazy day 😂",
       alt: "Memory photo 2 with Akka",
       rotation: 3,
       shinchanAnimation: "walk",
     },
     {
-      image: getAssetPath("assets/sister/photo3.jpg"),
+      image: getAssetPath("assets/sister/photo3.jpeg"),
       caption: "Forever memories 💕",
       alt: "Memory photo 3 with Akka",
       rotation: -2,
       shinchanAnimation: "happy",
     },
     {
-      image: getAssetPath("assets/sister/photo4.jpg"),
+      image: getAssetPath("assets/sister/photo4.jpeg"),
       caption: "Best moments 🌟",
       alt: "Memory photo 4 with Akka",
       rotation: 5,
       shinchanAnimation: "gift",
     },
     {
-      image: getAssetPath("assets/sister/photo5.jpg"),
+      image: getAssetPath("assets/sister/photo5.jpeg"),
       caption: "Us being us 😜",
       alt: "Memory photo 5 with Akka",
       rotation: -3,
       shinchanAnimation: "cry",
     },
     {
-      image: getAssetPath("assets/sister/photo6.jpg"),
+      image: getAssetPath("assets/sister/photo6.jpeg"),
       caption: "Always together 🤗",
       alt: "Memory photo 6 with Akka",
       rotation: 2,
@@ -140,18 +138,18 @@ Always keep smiling.`,
   awardTitle: "BEST AKKA AWARD 🏆",
   awardPresentation: "This award is proudly presented to",
   awardQualities: [
-    "Being annoying (lovingly)",
-    "Being incredibly caring",
-    "Being the best supporter",
-    "Being hilariously funny",
-    "Being absolutely irreplaceable",
+    "Being the sweetest sister ever",
+    "Always caring & supporting me",
+    "Being my forever secret keeper",
+    "Being hilariously funny & loving",
+    "Being absolutely irreplaceable in my life",
   ],
   awardRating: "∞ / 10",
 
   finalTitle: "Happy Raksha Bandhan Akka ❤️",
-  finalMessage: `No matter where life takes us,
-you'll always have a special place
-in my heart.`,
+  finalMessage: `Even in the afterbirth,
+I wish and pray you are always my Akka.
+Love you to the moon and back!`,
   finalSignoff: "Love you always Akka — Your Thambi ❤️",
 };
 

@@ -102,16 +102,16 @@ export default function IntroScene({ onNext, onMusicStart }: IntroSceneProps) {
 
       {/* Title */}
       <motion.h1
-        className="font-display text-center text-white text-2xl sm:text-3xl leading-snug font-bold"
+        className="font-display text-center text-white text-2xl sm:text-3xl leading-snug font-bold px-2"
         style={{ textShadow: "0 2px 20px rgba(0,0,0,0.4)" }}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4 }}
       >
-        IMAGINE receiving this
+        என் அன்பு அக்காவுக்கு...
         <br />
         <span className="bg-gradient-to-r from-rose-300 via-pink-200 to-amber-200 bg-clip-text text-transparent">
-          on Raksha Bandhan 🥹❤️
+          ஒரு இனிய சர்ப்ரைஸ் 🥹❤️
         </span>
       </motion.h1>
 
