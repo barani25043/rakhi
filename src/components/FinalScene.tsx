@@ -25,7 +25,7 @@ export default function FinalScene({ onReplay }: FinalSceneProps) {
 
   return (
     <motion.div
-      className="relative w-full h-full flex flex-col items-center justify-center gap-2 overflow-hidden cursor-sparkle py-6 px-4"
+      className="relative w-full h-full flex flex-col items-center justify-center gap-2 overflow-hidden cursor-sparkle pt-12 pb-6 px-4"
       style={{
         background:
           "linear-gradient(160deg, #4A1119 0%, #8B2252 30%, #C41E3A 50%, #E8456B 70%, #FF6B8A 100%)",

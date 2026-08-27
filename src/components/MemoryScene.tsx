@@ -21,7 +21,7 @@ export default function MemoryScene({ onNext }: MemorySceneProps) {
 
   return (
     <motion.div
-      className="relative w-full h-full flex flex-col overflow-y-auto overflow-x-hidden no-scrollbar px-3 py-4"
+      className="relative w-full h-full flex flex-col overflow-y-auto overflow-x-hidden custom-scrollbar px-3 pt-12 pb-6"
       style={{
         background:
           "linear-gradient(180deg, #FFF8F0 0%, #FFECD2 30%, #FFE0CC 60%, #FFD6E0 100%)",
@@ -32,7 +32,7 @@ export default function MemoryScene({ onNext }: MemorySceneProps) {
       transition={{ duration: 0.6 }}
     >
       {/* Title */}
-      <div className="pt-3 pb-1 text-center px-4 z-10 shrink-0">
+      <div className="pt-2 pb-1 text-center px-4 z-10 shrink-0">
 
         {/* Floating decorative elements */}
         {['🌸', '🌺', '✨', '🦋', '💮', '🌼', '⭐'].map((item, i) => (
@@ -80,13 +80,13 @@ export default function MemoryScene({ onNext }: MemorySceneProps) {
 
       {/* Top Shinchan Presenter */}
       <motion.div
-        className="flex justify-center py-2 z-10 shrink-0"
+        className="flex justify-center py-1 z-10 shrink-0"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.4 }}
       >
         <CharacterStage
-          size={110}
+          size={105}
           shinchanAnim="mischief"
           shinchanSpeech="Look at our memories Akka! 📸"
           sideMinions="both"
@@ -96,6 +96,18 @@ export default function MemoryScene({ onNext }: MemorySceneProps) {
           minionRightChar="stuart"
           compact
         />
+      </motion.div>
+
+      {/* Scroll Down Hint Pill */}
+      <motion.div
+        className="flex justify-center mb-1 z-10 shrink-0"
+        animate={{ y: [0, 4, 0] }}
+        transition={{ duration: 1.8, repeat: Infinity }}
+      >
+        <div className="px-3 py-1 bg-black/10 backdrop-blur-sm rounded-full text-xs font-hand font-bold text-gray-700 select-none flex items-center gap-1.5 shadow-sm">
+          <span>📸 Scroll down for all photos</span>
+          <span className="text-sm">↓</span>
+        </div>
       </motion.div>
 
       {/* Photos Grid */}

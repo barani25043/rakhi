@@ -11,10 +11,11 @@ export default function ProgressIndicator({
 }: ProgressIndicatorProps) {
   return (
     <motion.div
-      className="fixed bottom-5 left-1/2 -translate-x-1/2 z-[90] flex items-center gap-2"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 0.6 }}
-      transition={{ delay: 0.5 }}
+      className="fixed top-5 left-1/2 -translate-x-1/2 z-[130] flex items-center gap-2
+        bg-black/40 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10 shadow-lg pointer-events-none"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 0.85, y: 0 }}
+      transition={{ delay: 0.3 }}
     >
       {Array.from({ length: total }, (_, i) => (
         <div key={i} className="flex items-center">

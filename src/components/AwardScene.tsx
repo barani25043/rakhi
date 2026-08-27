@@ -24,7 +24,7 @@ export default function AwardScene({ onNext }: AwardSceneProps) {
 
   return (
     <motion.div
-      className="relative w-full h-full flex flex-col items-center overflow-y-auto overflow-x-hidden no-scrollbar px-4 py-4"
+      className="relative w-full h-full flex flex-col items-center overflow-y-auto overflow-x-hidden custom-scrollbar px-4 pt-12 pb-6"
       style={{
         background:
           "linear-gradient(160deg, #1a0a10 0%, #2D1018 30%, #3D1520 50%, #4A1119 70%, #1a0a10 100%)",

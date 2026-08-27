@@ -26,7 +26,7 @@ export default function LetterScene({ onNext }: LetterSceneProps) {
 
   return (
     <motion.div
-      className="relative w-full h-full flex flex-col items-center overflow-y-auto overflow-x-hidden no-scrollbar py-4 px-3"
+      className="relative w-full h-full flex flex-col items-center overflow-y-auto overflow-x-hidden custom-scrollbar pt-12 pb-6 px-3"
       style={{
         background:
           "linear-gradient(180deg, #FFF0F3 0%, #FFE8D6 30%, #FFF8F0 60%, #FFD6E0 100%)",
@@ -57,13 +57,13 @@ export default function LetterScene({ onNext }: LetterSceneProps) {
 
       {/* Top Shinchan Presenter */}
       <motion.div
-        className="w-full flex justify-center mb-3 z-10 shrink-0"
+        className="w-full flex justify-center mb-2 z-10 shrink-0"
         initial={{ opacity: 0, y: -15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
         <CharacterStage
-          size={110}
+          size={105}
           shinchanAnim="pajama"
           shinchanSpeech="Read my letter Akka! 📜❤️"
           sideMinions="both"
@@ -75,9 +75,19 @@ export default function LetterScene({ onNext }: LetterSceneProps) {
         />
       </motion.div>
 
+      {/* Scroll Down Hint Pill */}
+      <motion.div
+        className="mb-2 px-3 py-1 bg-black/10 backdrop-blur-sm rounded-full text-xs font-hand font-bold text-gray-700 select-none flex items-center gap-1.5 shadow-sm"
+        animate={{ y: [0, 4, 0] }}
+        transition={{ duration: 1.8, repeat: Infinity }}
+      >
+        <span>📜 Scroll to read full letter</span>
+        <span className="text-sm">↓</span>
+      </motion.div>
+
       {/* Letter Parchment Paper */}
       <motion.div
-        className="relative w-[94%] max-w-[420px] mb-20 z-20 shrink-0"
+        className="relative w-[94%] max-w-[420px] mb-8 z-20 shrink-0"
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, type: "spring" }}
