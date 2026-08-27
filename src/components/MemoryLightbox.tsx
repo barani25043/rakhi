@@ -147,7 +147,7 @@ export default function MemoryLightbox({
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={activeIndex}
-              className="relative z-10 w-[85vw] max-w-[400px] mx-auto"
+              className="relative z-10 w-[94vw] max-w-[650px] sm:max-w-[750px] mx-auto flex flex-col items-center"
               custom={direction}
               variants={slideVariants}
               initial="enter"
@@ -155,30 +155,25 @@ export default function MemoryLightbox({
               exit="exit"
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
-              {/* Photo with frame */}
-              <div className="bg-white p-3 rounded-lg shadow-2xl">
+              {/* Photo with frame — full scale & uncropped resolution */}
+              <div className="bg-white p-2.5 sm:p-4 rounded-xl shadow-2xl w-full flex items-center justify-center border border-white/20">
                 <motion.img
                   src={memory.image}
                   alt={memory.alt}
-                  className="w-full h-auto max-h-[60vh] object-cover rounded-sm"
-                  animate={{
-                    scale: [1, 1.02, 1],
-                  }}
-                  transition={{
-                    duration: 8,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
+                  className="w-full h-auto max-h-[72vh] sm:max-h-[76vh] object-contain rounded-lg shadow-inner select-none"
+                  initial={{ scale: 0.96 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.3 }}
                   draggable={false}
                 />
               </div>
 
               {/* Caption */}
               <motion.p
-                className="font-hand text-center text-white text-2xl mt-5"
+                className="font-hand text-center text-white text-2xl sm:text-3xl mt-4 font-bold drop-shadow-md"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
+                transition={{ delay: 0.15 }}
               >
                 {memory.caption}
               </motion.p>
