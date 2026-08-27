@@ -144,21 +144,22 @@ export default function MemoryScene({ onNext }: MemorySceneProps) {
         />
       </div>
 
-      {/* Continue */}
-      <div className="flex justify-center pb-16 pt-2 shrink-0">
+      {/* Sticky Floating Continue Button — always visible */}
+      <div className="sticky bottom-4 flex justify-center py-2 z-40 shrink-0">
         <motion.button
-          className="flex items-center gap-2 px-8 py-3
-            bg-gradient-to-r from-burgundy to-maroon text-white
-            rounded-full font-medium shadow-xl shimmer select-none cursor-pointer"
-          whileHover={{ scale: 1.05 }}
+          className="flex items-center gap-2 px-9 py-3.5
+            bg-gradient-to-r from-burgundy via-red-rakhi to-maroon text-white
+            rounded-full font-bold text-base shadow-2xl shimmer select-none cursor-pointer
+            border border-white/30 backdrop-blur-md"
+          whileHover={{ scale: 1.06 }}
           whileTap={{ scale: 0.95 }}
           onClick={onNext}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, type: "spring" }}
         >
-          Continue
-          <ChevronRight size={18} />
+          See Your Best Akka Award 🏆
+          <ChevronRight size={20} className="text-yellow-300" />
         </motion.button>
       </div>
 

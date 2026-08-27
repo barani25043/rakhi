@@ -158,23 +158,25 @@ export default function LetterScene({ onNext }: LetterSceneProps) {
           <div className="absolute bottom-2 right-2 text-gold/40 text-sm select-none" style={{ transform: "scale(-1)" }}>❧</div>
         </div>
 
-        {/* Continue */}
+        {/* Floating / Sticky Continue button — always visible above page bottom */}
         {showButton && (
           <motion.div
-            className="mt-5 flex justify-center"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
+            className="sticky bottom-4 mt-4 flex justify-center z-50 shrink-0"
+            initial={{ opacity: 0, y: 15, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
           >
             <motion.button
-              className="flex items-center gap-2 px-8 py-3
-                bg-gradient-to-r from-burgundy to-maroon text-white
-                rounded-full font-medium shadow-xl shimmer select-none cursor-pointer"
-              whileHover={{ scale: 1.05 }}
+              className="flex items-center gap-2 px-9 py-3.5
+                bg-gradient-to-r from-burgundy via-red-rakhi to-maroon text-white
+                rounded-full font-bold text-base shadow-2xl shimmer select-none cursor-pointer
+                border border-white/30 backdrop-blur-md"
+              whileHover={{ scale: 1.06 }}
               whileTap={{ scale: 0.95 }}
               onClick={onNext}
             >
-              Continue
-              <ChevronRight size={18} />
+              Continue to Memories ❤️
+              <ChevronRight size={20} className="text-amber-200" />
             </motion.button>
           </motion.div>
         )}

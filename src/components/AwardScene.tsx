@@ -229,20 +229,21 @@ export default function AwardScene({ onNext }: AwardSceneProps) {
         />
       </motion.div>
 
-      {/* Continue button */}
-      <div className="pb-12 pt-1 z-20 shrink-0">
+      {/* Continue button — sticky & prominent */}
+      <div className="sticky bottom-4 py-2 z-40 shrink-0 flex justify-center">
         <motion.button
-          className="flex items-center gap-2 px-8 py-3
-            bg-gradient-to-r from-gold-dark to-gold text-white
-            rounded-full font-medium shadow-xl shimmer select-none cursor-pointer"
+          className="flex items-center gap-2 px-9 py-3.5
+            bg-gradient-to-r from-gold-dark via-amber-500 to-gold text-white
+            rounded-full font-bold text-base shadow-2xl shimmer select-none cursor-pointer
+            border border-white/40 backdrop-blur-md"
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.8 }}
-          whileHover={{ scale: 1.05 }}
+          transition={{ delay: 1.5, type: "spring" }}
+          whileHover={{ scale: 1.06 }}
           whileTap={{ scale: 0.95 }}
           onClick={onNext}
         >
-          One Last Thing ❤️
+          One Last Thing for Akka ❤️
         </motion.button>
       </div>
     </motion.div>
