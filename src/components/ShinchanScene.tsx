@@ -72,12 +72,15 @@ function playBlastSound() {
   }
 }
 
-// Generate a random position within the content area bounds
+// Generate a random position for NO button that avoids overlaying the YES button
 function randomNoPosition() {
+  // Pick an angle and distance so it never lands directly on the YES button
+  const angle = Math.random() * Math.PI * 2;
+  const distance = 85 + Math.random() * 70; // 85px to 155px away from center
   return {
-    x: (Math.random() - 0.5) * 220,
-    y: (Math.random() - 0.5) * 180,
-    rotate: (Math.random() - 0.5) * 40,
+    x: Math.cos(angle) * distance,
+    y: Math.sin(angle) * (distance * 0.65), // Keep within vertical bounds of card
+    rotate: (Math.random() - 0.5) * 35,
   };
 }
 
@@ -465,97 +468,105 @@ export default function ShinchanScene({ onNext }: ShinchanSceneProps) {
                     : cardData.characterQuestion}
                 </p>
 
-                {/* Button area — relative container for the flying NO button */}
+                {/* Button area — side-by-side initially, flying away on NO click */}
                 {!isBlasting && (
-                  <div className="relative w-full min-h-[120px] flex items-center justify-center">
-                    {/* YES Button — always stays in center */}
-                    <motion.button
-                      className="px-7 py-2.5 bg-gradient-to-r from-rose to-red-rakhi
-                        text-white font-semibold rounded-full shadow-lg
-                        text-base select-none cursor-pointer z-20"
-                      whileHover={{ scale: 1.08 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={handleYes}
-                      animate={
-                        noCount >= 3
-                          ? {
-                              scale: [1, 1.08, 1],
-                            }
-                          : {}
-                      }
-                      transition={
-                        noCount >= 3
-                          ? { duration: 0.8, repeat: Infinity }
-                          : {}
-                      }
-                    >
-                      {noCount >= 3 ? "JUST CLICK YES! ❤️" : "YES ❤️"}
-                    </motion.button>
+                  <div className="relative w-full min-h-[110px] flex items-center justify-center">
+                    <div className={`flex items-center justify-center ${noCount === 0 ? "gap-6" : ""}`}>
+                      {/* YES Button */}
+                      <motion.button
+                        className="px-7 py-2.5 bg-gradient-to-r from-rose to-red-rakhi
+                          text-white font-semibold rounded-full shadow-lg
+                          text-base select-none cursor-pointer z-20"
+                        whileHover={{ scale: 1.08 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={handleYes}
+                        animate={
+                          noCount >= 3
+                            ? {
+                                scale: [1, 1.08, 1],
+                              }
+                            : {}
+                        }
+                        transition={
+                          noCount >= 3
+                            ? { duration: 0.8, repeat: Infinity }
+                            : {}
+                        }
+                      >
+                        {noCount >= 3 ? "JUST CLICK YES! ❤️" : "YES ❤️"}
+                      </motion.button>
 
-                    {/* The NAUGHTY Rocket NO Button — flies around! */}
-                    <motion.button
-                      className={`absolute px-5 py-2 font-bold rounded-full shadow-xl text-sm select-none cursor-pointer z-30 ${
-                        noCount >= 4
-                          ? "bg-red-500 text-white border-2 border-yellow-300"
-                          : noCount >= 2
-                            ? "bg-amber-400 text-amber-900 border-2 border-amber-500"
-                            : noCount >= 1
-                              ? "bg-amber-100 text-amber-900 border border-amber-300"
-                              : "bg-gray-100 text-gray-600 border border-gray-200"
-                      }`}
-                      animate={{
-                        x: noPos.x,
-                        y: noPos.y,
-                        rotate: noPos.rotate,
-                        scale: noScale,
-                      }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 200,
-                        damping: 12,
-                        mass: 0.8,
-                      }}
-                      whileHover={{
-                        scale: noScale * 1.1,
-                        rotate: noPos.rotate + 10,
-                      }}
-                      whileTap={{ scale: noScale * 0.9 }}
-                      onClick={handleNo}
-                    >
-                      {currentNoLabel}
+                      {/* The NAUGHTY Rocket NO Button — side by side initially, flies away on click */}
+                      <motion.button
+                        className={`${
+                          noCount === 0 ? "relative" : "absolute"
+                        } px-5 py-2 font-bold rounded-full shadow-xl text-sm select-none cursor-pointer z-30 ${
+                          noCount >= 4
+                            ? "bg-red-500 text-white border-2 border-yellow-300"
+                            : noCount >= 2
+                              ? "bg-amber-400 text-amber-900 border-2 border-amber-500"
+                              : noCount >= 1
+                                ? "bg-amber-100 text-amber-900 border border-amber-300"
+                                : "bg-gray-100 text-gray-600 border border-gray-200"
+                        }`}
+                        animate={
+                          noCount === 0
+                            ? { x: 0, y: 0, rotate: 0, scale: 1 }
+                            : {
+                                x: noPos.x,
+                                y: noPos.y,
+                                rotate: noPos.rotate,
+                                scale: noScale,
+                              }
+                        }
+                        transition={{
+                          type: "spring",
+                          stiffness: 200,
+                          damping: 12,
+                          mass: 0.8,
+                        }}
+                        whileHover={{
+                          scale: noScale * 1.1,
+                          rotate: (noPos?.rotate || 0) + 10,
+                        }}
+                        whileTap={{ scale: noScale * 0.9 }}
+                        onClick={handleNo}
+                      >
+                        {currentNoLabel}
 
-                      {/* Naughty taunt emoji that pops out */}
-                      <AnimatePresence>
-                        {naughtyEmoji && (
+                        {/* Naughty taunt emoji that pops out */}
+                        <AnimatePresence>
+                          {naughtyEmoji && (
+                            <motion.span
+                              className="absolute -top-6 left-1/2 -translate-x-1/2 text-xl pointer-events-none select-none"
+                              initial={{ opacity: 1, y: 0, scale: 0.5 }}
+                              animate={{ opacity: 0, y: -20, scale: 1.5 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.6 }}
+                            >
+                              {naughtyEmoji}
+                            </motion.span>
+                          )}
+                        </AnimatePresence>
+
+                        {/* Rocket flame trail when moving */}
+                        {noCount >= 2 && (
                           <motion.span
-                            className="absolute -top-6 left-1/2 -translate-x-1/2 text-xl pointer-events-none select-none"
-                            initial={{ opacity: 1, y: 0, scale: 0.5 }}
-                            animate={{ opacity: 0, y: -20, scale: 1.5 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.6 }}
+                            className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-sm pointer-events-none select-none"
+                            animate={{
+                              opacity: [0.8, 0.3, 0.8],
+                              scale: [1, 1.3, 1],
+                            }}
+                            transition={{
+                              duration: 0.3,
+                              repeat: Infinity,
+                            }}
                           >
-                            {naughtyEmoji}
+                            🔥
                           </motion.span>
                         )}
-                      </AnimatePresence>
-
-                      {/* Rocket flame trail when moving */}
-                      {noCount >= 2 && (
-                        <motion.span
-                          className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-sm pointer-events-none select-none"
-                          animate={{
-                            opacity: [0.8, 0.3, 0.8],
-                            scale: [1, 1.3, 1],
-                          }}
-                          transition={{
-                            duration: 0.3,
-                            repeat: Infinity,
-                          }}
-                        >
-                          🔥
-                        </motion.span>
-                      )}
-                    </motion.button>
+                      </motion.button>
+                    </div>
                   </div>
                 )}
               </motion.div>
