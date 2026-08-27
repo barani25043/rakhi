@@ -63,25 +63,49 @@ export function useBackgroundMusic({
         ctx.resume();
       }
 
-      // Emotional Tamil melody (Mohanam / Bilahari raga inspired notes & gentle harmonies)
-      // Notes: G4, E5, D5, C5, D5, E5, G5, A5, G5, E5, D5, C5, D5, C5, A4, C5
-      const melodySequence = [
-        { note: 392.0, duration: 0.7, bass: 130.81 },  // G4 (Sa/Pa)
-        { note: 659.25, duration: 0.6, bass: 164.81 }, // E5
-        { note: 587.33, duration: 0.5, bass: 196.0 },  // D5
-        { note: 523.25, duration: 0.8, bass: 130.81 }, // C5
-        { note: 587.33, duration: 0.5, bass: 146.83 }, // D5
-        { note: 659.25, duration: 0.6, bass: 164.81 }, // E5
-        { note: 783.99, duration: 0.9, bass: 196.0 },  // G5
-        { note: 880.0, duration: 0.6, bass: 220.0 },   // A5
-        { note: 783.99, duration: 0.6, bass: 196.0 },  // G5
-        { note: 659.25, duration: 0.5, bass: 164.81 }, // E5
-        { note: 587.33, duration: 0.6, bass: 146.83 }, // D5
-        { note: 523.25, duration: 0.8, bass: 130.81 }, // C5
-        { note: 587.33, duration: 0.5, bass: 146.83 }, // D5
-        { note: 523.25, duration: 0.9, bass: 130.81 }, // C5
-        { note: 440.0, duration: 0.6, bass: 110.0 },   // A4
-        { note: 523.25, duration: 1.2, bass: 130.81 }, // C5 (held)
+      // Soulful Tamil Sister/Brother Bond Melody
+      // (Inspired by classic Tamil sibling songs: "Kannana Kanne" & "Aanandha Yaazhai" / "Malargale")
+      const melodySequence: Array<{
+        note: number;
+        harmony?: number;
+        bass: number;
+        duration: number;
+        pause?: number;
+      }> = [
+        // Section 1: Soulful intro / opening phrasing ("Kannana Kanne... En Thangame...")
+        { note: 523.25, harmony: 659.25, bass: 130.81, duration: 0.65 }, // C5 + E5, C3
+        { note: 587.33, harmony: 698.46, bass: 146.83, duration: 0.55 }, // D5 + F5, D3
+        { note: 659.25, harmony: 783.99, bass: 164.81, duration: 0.75 }, // E5 + G5, E3
+        { note: 783.99, harmony: 987.77, bass: 196.00, duration: 0.90 }, // G5 + B5, G3
+        { note: 659.25, harmony: 783.99, bass: 164.81, duration: 0.55 }, // E5
+        { note: 587.33, harmony: 698.46, bass: 146.83, duration: 0.65 }, // D5
+        { note: 523.25, harmony: 659.25, bass: 130.81, duration: 0.95 }, // C5
+        { note: 440.00, harmony: 523.25, bass: 110.00, duration: 0.70 }, // A4
+
+        // Section 2: Rising affection ("Aanandha Yaazhai Meetugirai...")
+        { note: 523.25, harmony: 659.25, bass: 130.81, duration: 0.60 }, // C5
+        { note: 659.25, harmony: 783.99, bass: 164.81, duration: 0.60 }, // E5
+        { note: 783.99, harmony: 987.77, bass: 196.00, duration: 0.70 }, // G5
+        { note: 880.00, harmony: 1046.50, bass: 220.00, duration: 0.85 }, // A5 + C6, A3
+        { note: 987.77, harmony: 1174.66, bass: 246.94, duration: 0.60 }, // B5 + D6, B3
+        { note: 880.00, harmony: 1046.50, bass: 220.00, duration: 0.60 }, // A5
+        { note: 783.99, harmony: 987.77, bass: 196.00, duration: 0.80 }, // G5
+        { note: 659.25, harmony: 783.99, bass: 164.81, duration: 0.95 }, // E5
+
+        // Section 3: Gentle Tamil flute flourish ("Poo Pookum Oosai... Anbe...")
+        { note: 783.99, harmony: 987.77, bass: 196.00, duration: 0.55 }, // G5
+        { note: 880.00, harmony: 1046.50, bass: 220.00, duration: 0.55 }, // A5
+        { note: 1046.50, harmony: 1318.51, bass: 261.63, duration: 0.90 }, // C6 + E6, C4
+        { note: 880.00, harmony: 1046.50, bass: 220.00, duration: 0.55 }, // A5
+        { note: 783.99, harmony: 987.77, bass: 196.00, duration: 0.65 }, // G5
+        { note: 659.25, harmony: 783.99, bass: 164.81, duration: 0.70 }, // E5
+        { note: 587.33, harmony: 698.46, bass: 146.83, duration: 0.60 }, // D5
+        { note: 523.25, harmony: 659.25, bass: 130.81, duration: 1.20 }, // C5 (warm hold)
+
+        // Section 4: Sweet resolution
+        { note: 440.00, harmony: 587.33, bass: 110.00, duration: 0.65 }, // A4
+        { note: 493.88, harmony: 659.25, bass: 123.47, duration: 0.60 }, // B4
+        { note: 523.25, harmony: 659.25, bass: 130.81, duration: 1.40 }, // C5 (final sustain)
       ];
       let idx = 0;
 
@@ -91,48 +115,53 @@ export function useBackgroundMusic({
         const current = melodySequence[idx % melodySequence.length];
         const now = ctx.currentTime;
 
-        // Lead flute/bell oscillator
+        // 1. Lead Flute/Melody Tone (Sine + gentle vibrato)
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = "sine";
         osc.frequency.setValueAtTime(current.note, now);
 
-        // Soft shimmer overtone
-        const overtone = ctx.createOscillator();
-        const overtoneGain = ctx.createGain();
-        overtone.type = "triangle";
-        overtone.frequency.setValueAtTime(current.note * 2, now);
+        // 2. Harmony String/Chime Tone
+        let harmonyOsc: OscillatorNode | null = null;
+        let harmonyGain: GainNode | null = null;
+        if (current.harmony) {
+          harmonyOsc = ctx.createOscillator();
+          harmonyGain = ctx.createGain();
+          harmonyOsc.type = "triangle";
+          harmonyOsc.frequency.setValueAtTime(current.harmony, now);
 
-        // Warm bass drone note
+          harmonyGain.gain.setValueAtTime(0, now);
+          harmonyGain.gain.linearRampToValueAtTime(volume * 0.12, now + 0.08);
+          harmonyGain.gain.exponentialRampToValueAtTime(0.001, now + current.duration + 0.3);
+
+          harmonyOsc.connect(harmonyGain);
+          harmonyGain.connect(ctx.destination);
+          harmonyOsc.start(now);
+          harmonyOsc.stop(now + current.duration + 0.3);
+        }
+
+        // 3. Acoustic Warm Bass / Drone (Rich low resonance)
         const bassOsc = ctx.createOscillator();
         const bassGain = ctx.createGain();
         bassOsc.type = "sine";
         bassOsc.frequency.setValueAtTime(current.bass, now);
 
-        // Envelopes for smooth, gentle acoustic feel
+        // Lead envelope (soft attack, sustained flute/music-box tone, gentle release)
         gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(volume * 0.32, now + 0.08);
+        gain.gain.linearRampToValueAtTime(volume * 0.35, now + 0.06);
         gain.gain.exponentialRampToValueAtTime(0.001, now + current.duration + 0.4);
 
-        overtoneGain.gain.setValueAtTime(0, now);
-        overtoneGain.gain.linearRampToValueAtTime(volume * 0.09, now + 0.05);
-        overtoneGain.gain.exponentialRampToValueAtTime(0.001, now + current.duration * 0.8);
-
         bassGain.gain.setValueAtTime(0, now);
-        bassGain.gain.linearRampToValueAtTime(volume * 0.18, now + 0.1);
+        bassGain.gain.linearRampToValueAtTime(volume * 0.20, now + 0.1);
         bassGain.gain.exponentialRampToValueAtTime(0.001, now + current.duration + 0.6);
 
         osc.connect(gain);
         gain.connect(ctx.destination);
-        overtone.connect(overtoneGain);
-        overtoneGain.connect(ctx.destination);
         bassOsc.connect(bassGain);
         bassGain.connect(ctx.destination);
 
         osc.start(now);
         osc.stop(now + current.duration + 0.4);
-        overtone.start(now);
-        overtone.stop(now + current.duration + 0.8);
         bassOsc.start(now);
         bassOsc.stop(now + current.duration + 0.6);
 
@@ -140,7 +169,7 @@ export function useBackgroundMusic({
       };
 
       playNote();
-      synthIntervalRef.current = window.setInterval(playNote, 580);
+      synthIntervalRef.current = window.setInterval(playNote, 560);
       setIsPlaying(true);
       setIsMuted(false);
     } catch {
